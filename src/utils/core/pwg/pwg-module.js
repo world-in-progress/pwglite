@@ -5,6 +5,8 @@ pwg graphics lib wenyongning@njnu.edu.cn
 /*
     pwg-base.js
 */
+let pwg;
+
 if (typeof pwg === 'undefined')
     pwg = {};
 pwg.ROOT_PATH="";
@@ -13458,5 +13460,7 @@ pwg.jxt = function () {
     pwg.utils.injectTransformEx(JxtCanvas.prototype);
     pwg.JxtCanvas = JxtCanvas;
 };
+
+export default pwg
 
 
