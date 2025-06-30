@@ -1,0 +1,15 @@
+<svg id="铁塔_同角钢塔_耐张_" data-name="铁塔（同角钢塔，耐张）" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8.75 8.75">
+    <defs>
+        <style>
+            .cls-1 {
+                fill: gray;
+                stroke: #000;
+                stroke-miterlimit: 10;
+                stroke-width: 0.25px;
+            }
+        </style>
+    </defs>
+    <rect class="cls-1" x="0.13" y="0.13" width="8.5" height="8.5" />
+    <line class="cls-1" x1="0.13" y1="8.63" x2="8.63" y2="0.13" />
+    <line class="cls-1" x1="0.13" y1="0.13" x2="8.63" y2="8.63" />
+</svg>

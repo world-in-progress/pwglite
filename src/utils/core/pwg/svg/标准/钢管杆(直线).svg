@@ -1,0 +1,15 @@
+<svg id="钢管杆_直线_" data-name="钢管杆(直线)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8.75 8.75">
+    <defs>
+        <style>
+            .cls-1 {
+                fill: none;
+                stroke: #000;
+                stroke-miterlimit: 10;
+                stroke-width: 0.25px;
+            }
+        </style>
+    </defs>
+    <circle class="cls-1" cx="4.38" cy="4.38" r="4.25" />
+    <line class="cls-1" x1="1.37" y1="7.38" x2="7.38" y2="1.37" />
+    <line class="cls-1" x1="7.38" y1="7.38" x2="1.37" y2="1.37" />
+</svg>

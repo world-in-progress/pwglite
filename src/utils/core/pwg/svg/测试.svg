@@ -1,0 +1,32 @@
+<svg id="图层_2" data-name="图层 2" xmlns="http://www.w3.org/2000/svg" viewBox="38 0 52 128">
+    <defs>
+        <style>
+            .cls-1 {
+                fill: none;
+                stroke-width: 2px;
+                stroke: #333;
+                stroke-linejoin: round;
+            }
+            
+            .cls-2 {
+                fill: none;
+                stroke-width: 1px;
+                stroke: #333;
+                stroke-linejoin: round;
+            }
+
+        </style>
+    </defs>
+    <title>g</title>
+    <g id="运行水电厂">
+        <line class="cls-2" x1="64.96" y1="117.53" x2="64.96" y2="128.45" />
+        <circle class="cls-1" cx="64.96" cy="57.29" r="23.88" />
+        <circle class="cls-1" cx="64.96" cy="93.09" r="23.88" />
+        <polygon class="cls-2" points="64.96 86.38 54.9 103.8 75.02 103.8 64.96 86.38" />
+        <path class="cls-2" d="M65.22,0.45L65.27,10c.49.4,1,.81,1.47,1.22C78.17,20.88,84.11,35,87.78,50" />
+        <line class="cls-2" x1="64.2" y1="53.64" x2="64.2" y2="67.29" />
+        <line class="cls-2" x1="73.3" y1="47.29" x2="64.17" y2="53.74" />
+        <line class="cls-2" x1="64.23" y1="53.74" x2="55.1" y2="47.29" />
+        <line class="cls-2" x1="64.2" y1="53.69" x2="74.82" y2="53.69" />
+    </g>
+</svg>

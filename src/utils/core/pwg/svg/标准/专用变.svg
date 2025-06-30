@@ -1,0 +1,16 @@
+<svg id="专用变" xmlns="http://www.w3.org/2000/svg" viewBox="1.3 0.84 4.9 10.59">
+    <defs>
+        <style>
+            .cls-1 {
+                fill: none;
+                stroke: #231815;
+                stroke-miterlimit: 10;
+                stroke-width: 0.25px;
+            }
+        </style>
+    </defs>
+    <circle class="cls-1" cx="3.67" cy="4.12" r="2.13" />
+    <circle class="cls-1" cx="3.67" cy="7.46" r="2.13" />
+    <line class="cls-1" x1="3.67" y1="1.86" x2="3.67" y2="0.84" />
+    <line class="cls-1" x1="3.67" y1="10.71" x2="3.67" y2="9.69" />
+</svg>

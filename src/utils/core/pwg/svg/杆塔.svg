@@ -1,0 +1,17 @@
+<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 771.99 771.99">
+    <defs>
+        <style>
+            .cls-1 {
+                fill: none;
+                stroke: #231815;
+                stroke-miterlimit: 10;
+                stroke-width: 2.71px;
+            }
+        </style>
+    </defs>
+    <title>杆塔</title>
+    <circle class="cls-1" cx="386" cy="386" r="384.64" />
+    <line class="cls-1" x1="106.93" y1="649.79" x2="650.89" y2="105.83" />
+    <line class="cls-1" x1="273.12" y1="753.81" x2="753.8" y2="273.12" />
+    <line class="cls-1" x1="11.51" y1="474.17"  x2="472.66" y2="13.02" />
+</svg>

@@ -1,0 +1,5 @@
+<svg width="30" height="30" viewBox="-15 -15 30 30" xmlns="http://www.w3.org/2000/svg">
+    <circle x='0' y='0' r='14' stroke='red' stroke-width='1' fill='none'/>
+    <circle x='0' y='0' r='9' stroke='red' stroke-width='1' fill='none'/>  
+    <text font-style="normal" font-size="14" font-weight="normal" y="5" x="-7"  fill="#FF0000">专</text>
+</svg>

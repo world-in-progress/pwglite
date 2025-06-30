@@ -1,0 +1,13 @@
+<svg id="变电站110_66_kv" data-name="变电站110(66)kv" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8.75 8.75">
+    <defs>
+        <style>
+            .cls-1 {
+                fill: none;
+                stroke: #231815;
+                stroke-miterlimit: 10;
+                stroke-width: 0.25px;
+            }
+        </style>
+    </defs>
+    <circle class="cls-1" cx="4.38" cy="4.38" r="4.25" />
+</svg>

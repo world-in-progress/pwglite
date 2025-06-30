@@ -1,0 +1,7 @@
+<svg width="48" height="128" xmlns="http://www.w3.org/2000/svg">
+  <ellipse stroke="red" stroke-width="2" ry="23" rx="22" id="svg_7" cy="65.5" cx="24" fill="rgba(1,0,0,0.0)"/>
+  <rect  stroke="red" stroke-width="2" id="svg_1" height="92" width="46" y="20.5" x="1" fill="rgba(1,0,0,0.0)"/>
+  <text font-style="normal" font-weight="normal" stroke-dasharray="5,5" xml:space="preserve" text-anchor="start" font-family="Noto Sans JP" font-size="24" stroke-width="0" id="svg_3" y="75.5" x="12" stroke="#00FF00" fill="#FF0000">电</text>
+  <line id="svg_4" y2="0.5" x2="23" y1="19.5" x1="23" stroke="red" stroke-width="2" fill="none"/>
+  <line id="svg_5" y2="111.5" x2="23" y1="128" x1="23" stroke="red" stroke-width="2" fill="none"/>
+</svg>
