@@ -28,7 +28,7 @@ export default class pwglite {
     this._uicontext.uitool = this._uicontext.tools["editing"];
     this._overLayer.on = function (n, e) {
       if (n === "child-added") {
-        that._createCallback({featureId: e.child.id});
+        that._createCallback({ featureId: e.child.id });
       }
       if (n === "child-removed") {
         that._removeCallback(e);
@@ -67,7 +67,7 @@ export default class pwglite {
     const build = this._builds.find((item) => item.constructor.name === name);
     let uicontext = this._uicontext;
     uicontext.creatingBuild = build;
-    this._setUiTool("creating")
+    this._setUiTool("creating");
   }
 
   _setUiTool(name) {
@@ -98,7 +98,7 @@ export default class pwglite {
   changeMode(mode, options = {}) {
     if (mode === "create") {
       if (options.name) {
-        this._setUiTool("creating")
+        this._uicontext.activeObject = null;
         this._activateBuild(options.name);
       }
     }
@@ -108,7 +108,7 @@ export default class pwglite {
           (item) => item.id === options.featureId
         );
         if (feature) {
-          this._setUiTool("editing")
+          this._setUiTool("editing");
           this._uicontext.activeObject = feature;
         }
       }
