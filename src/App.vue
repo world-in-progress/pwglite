@@ -47,7 +47,7 @@ onMounted(() => {
   builds.value = pwg.getAllBuilds();
 
   pwg.on("draw.create", (e) => {
-    pwg.changeMode("edit", {featureId: e})
+    pwg.changeMode("edit", e)
     console.log(pwg.getAllFeatures());
   });
 

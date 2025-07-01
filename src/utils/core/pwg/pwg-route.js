@@ -639,7 +639,8 @@ pwg.route = function () {
         get: function () {
             var _id = this._head.__using_id__() + "|" + this._t + "|" + this._tail.__using_id__();
             return _id;
-        }
+        },
+        set: function(val) { this._id = val; }
     });
     RouteLocation.prototype.setExternal = function (e, owner) {
         var b = this.set(e);
