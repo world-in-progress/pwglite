@@ -80,8 +80,8 @@ onMounted(() => {
     zoom: 14,
     minZoom: 1,
     center: [118.626926, 28.737245],
-    pitchWithRotate: false,
-    dragRotate: false,
+    // pitchWithRotate: false,
+    // dragRotate: false,
     style: "mapbox://styles/mapbox/streets-v9",
   });
 
@@ -90,26 +90,22 @@ onMounted(() => {
   builds.value = pwg.getAllBuilds();
 
   pwg.on("draw.create", (e) => {
-    // 设置新创建的特征为高亮状态
-    highlightedFeatureId.value = e.id;
-    pwg?.changeMode("edit", e);
-    console.log(pwg?.getAllFeatures());
-    // 更新features列表
-    updateFeaturesList();
+    pwg.changeMode("edit", e);
+    console.log(pwg.getAllFeatures());
   });
 
   pwg.on("draw.remove", (e) => {
-    // 如果删除的是高亮特征，清除高亮状态
-    if (highlightedFeatureId.value === e.id) {
-      highlightedFeatureId.value = null;
+    console.log("已删除", e.featureId);
+  });
+
+  pwg.on("draw.select", (e) => {
+    console.log("选择", e.featureId);
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" || event.key === "Esc") {
+      pwg.changeMode('none')
     }
-    // 如果删除的特征在隐藏列表中，也要移除
-    if (hiddenFeatures.value.has(e.id)) {
-      hiddenFeatures.value.delete(e.id);
-    }
-    console.log(e);
-    // 更新features列表
-    updateFeaturesList();
   });
 
   pwg.on("draw.update", () => {
@@ -128,7 +124,11 @@ onMounted(() => {
     <div id="sidebar">
       <div class="sidebar-header">对象列表</div>
       <select id="h_create_calss_list" multiple @change="onCreateClassChanged">
-        <option v-for="(build, index) in builds" :key="index" :value="build.name">
+        <option
+          v-for="(build, index) in builds"
+          :key="index"
+          :value="build.name"
+        >
           {{ build.label }}
         </option>
       </select>
