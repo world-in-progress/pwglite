@@ -131,7 +131,8 @@ pwg.graphics.base = function () {
         scene: {
             get: function () {
                 return this.container.scene;
-            }
+            },
+            set: function (val) {}
         },
         text: {
             get: function () {
