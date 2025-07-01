@@ -12984,8 +12984,12 @@ pwg.mapbox = function (mapbox) {
         canvas.height = parseInt(mapboxCanvas.style.height) * pwg.DEVICE_PIXEL_RATIO;
         canvas.style.width = mapboxCanvas.style.width;
         canvas.style.height = mapboxCanvas.style.height;
+        canvas.style.top = "0";
+        canvas.style.left = "0";
         canvasContainer.appendChild(canvas);
         this.canvas = canvas;
+
+        console.log(canvasContainer)
 
         this.context = new GraphicsMapboxContext();
         this.context.t = this.map.transform;

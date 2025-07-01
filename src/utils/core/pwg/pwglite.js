@@ -3,6 +3,13 @@ import paper from "./paper-core";
 import mapboxgl from "mapbox-gl";
 
 export default class pwglite {
+  _overLayer = null;
+  _scene = null;
+  _uicontext = null;
+  _builds = [];
+  _createCallback = null;
+  _activeFeature = null;
+
   constructor(map) {
     pwg.ROOT_PATH = "";
     pwg.initialize(paper);
@@ -20,7 +27,12 @@ export default class pwglite {
 
     this._uicontext.uitool = this._uicontext.tools["editing"];
     this._overLayer.on = function (n, e) {
-      console.log(n, e);
+      if (n === "child-added") {
+        that._createCallback({featureId: e.child.id});
+      }
+      if (n === "child-removed") {
+        that._removeCallback(e);
+      }
     };
     pwg.worker = new Worker(new URL("./pwg-worker.js", import.meta.url), {
       type: "module",
@@ -46,13 +58,60 @@ export default class pwglite {
   }
 
   getAllBuilds() {
-    return this._builds.map((build) => build.title);
+    return this._builds.map((build) => {
+      return { name: build.constructor.name, label: build.title };
+    });
   }
 
-  activateBuild(name) {
-    const build = this._builds.find((item) => item.title === name);
+  _activateBuild(name) {
+    const build = this._builds.find((item) => item.constructor.name === name);
     let uicontext = this._uicontext;
     uicontext.creatingBuild = build;
-    uicontext.uitool = uicontext.tools["creating"];
+    this._setUiTool("creating")
+  }
+
+  _setUiTool(name) {
+    if (this._uicontext.tools[name]) {
+      this._uicontext.uitool = this._uicontext.tools[name];
+    }
+  }
+
+  getAllFeatures() {
+    return this._scene.children.map((item) => {
+      return {
+        item: item.id,
+        type: item.constructor.name,
+      };
+    });
+    // return this._scene.children.map(item => item)
+  }
+
+  on(eventName, callback) {
+    if (eventName === "draw.create") {
+      this._createCallback = callback;
+    }
+    if (eventName === "draw.remove") {
+      this._removeCallback = callback;
+    }
+  }
+
+  changeMode(mode, options = {}) {
+    if (mode === "create") {
+      if (options.name) {
+        this._setUiTool("creating")
+        this._activateBuild(options.name);
+      }
+    }
+    if (mode === "edit") {
+      if (options.featureId) {
+        let feature = this._scene.children.find(
+          (item) => item.id === options.featureId
+        );
+        if (feature) {
+          this._setUiTool("editing")
+          this._uicontext.activeObject = feature;
+        }
+      }
+    }
   }
 }
