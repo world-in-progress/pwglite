@@ -2,13 +2,13 @@
 import mapboxgl from "mapbox-gl";
 import { ref, onMounted } from "vue";
 // import pwg from "@/utils/core/pwg/pwg-module";
-import pwglite from "@/utils/core/pwg/pwglite"
+import pwglite from "@/utils/core/pwg/pwglite";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiZmxpY2tlcjA1NiIsImEiOiJjbGd4OXM1c3cwOWs3M21ta2RiMDhoczVnIn0.lE8NriBf_g3RZWCusw_mZA";
 
 const mapContainer = ref(null);
-const builds = ref<{ type: string }[]>([]);
+const builds = ref<{ name: string; label: string }[]>([]);
 let pwg;
 // const builds = ref([
 //   "建筑物",
@@ -26,7 +26,8 @@ const onCreateClassChanged = (event: Event) => {
   for (let i = 0; i < selectedOptions.length; i++) {
     const item = selectedOptions[i];
     console.log("选中对象：", item.textContent);
-    pwg.activateBuild(item.textContent)
+    // pwg.activateBuild(item.textContent)
+    pwg.changeMode("create", { name: item.value });
   }
 };
 
@@ -41,9 +42,18 @@ onMounted(() => {
     style: "mapbox://styles/mapbox/streets-v9",
   });
 
-  pwg = new pwglite(map)
+  pwg = new pwglite(map);
 
   builds.value = pwg.getAllBuilds();
+
+  pwg.on("draw.create", (e) => {
+    pwg.changeMode("edit", {featureId: e})
+    console.log(pwg.getAllFeatures());
+  });
+
+  pwg.on("draw.remove", (e) => {
+    console.log(e);
+  });
 });
 </script>
 
@@ -52,16 +62,9 @@ onMounted(() => {
     <!-- 侧边栏 -->
     <div id="sidebar">
       <div class="sidebar-header">对象列表</div>
-      <select
-        id="h_create_calss_list"
-        multiple
-        @change="onCreateClassChanged"
-      >
-        <option
-          v-for="(build, index) in builds"
-          :key="index"
-        >
-          {{ build }}
+      <select id="h_create_calss_list" multiple @change="onCreateClassChanged">
+        <option v-for="(build, index) in builds" :key="index" :value="build.name">
+          {{ build.label }}
         </option>
       </select>
     </div>
@@ -72,7 +75,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-@import 'mapbox-gl/dist/mapbox-gl.css';
+@import "mapbox-gl/dist/mapbox-gl.css";
 
 #app {
   display: flex;
