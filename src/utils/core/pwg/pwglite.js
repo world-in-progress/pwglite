@@ -2,6 +2,8 @@ import pwg from "./pwg-module";
 import paper from "./paper-core";
 import mapboxgl from "mapbox-gl";
 
+let pwgInitialized = false;
+
 export default class pwglite {
   _overLayer = null;
   _scene = null;
@@ -15,12 +17,18 @@ export default class pwglite {
   _activeFeature = null;
 
   constructor(map) {
-    pwg.ROOT_PATH = "";
-    pwg.initialize(paper);
-    pwg.mapbox(mapboxgl);
 
-    pwg.DEVICE_PIXEL_RATIO = 2; // ol.has.DEVICE_PIXEL_RATIO;
-    pwg.POINT_MIN_SCALE = 0.25;
+    // 确保pwg为单例
+    if (!pwgInitialized) {
+      pwg.ROOT_PATH = "";
+      pwg.initialize(paper);
+      pwg.mapbox(mapboxgl);
+
+      pwg.DEVICE_PIXEL_RATIO = 2; // ol.has.DEVICE_PIXEL_RATIO;
+      pwg.POINT_MIN_SCALE = 0.25;
+
+      pwgInitialized = true;
+    }
 
     this._overLayer = new pwg.mapbox.Layer({ map: map });
     this._scene = this._overLayer.workspace.createScene("test", true);
@@ -31,6 +39,7 @@ export default class pwglite {
 
     this._uicontext.uitool = this._uicontext.tools["editing"];
     this._overLayer.on = (n, e) => {
+      // console.log(n, e)
       if (n === "child-added") {
         if (this._createCallback) {
           this._createCallback({ featureId: e.child.id });
@@ -130,6 +139,9 @@ export default class pwglite {
           this._uicontext.activeObject = feature;
         }
       }
+    }
+    if (mode === "none") {
+      this._setUiTool("info")
     }
   }
 }

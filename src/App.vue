@@ -47,7 +47,7 @@ onMounted(() => {
   builds.value = pwg.getAllBuilds();
 
   pwg.on("draw.create", (e) => {
-    pwg.changeMode("edit", e)
+    pwg.changeMode("edit", e);
     console.log(pwg.getAllFeatures());
   });
 
@@ -57,7 +57,13 @@ onMounted(() => {
 
   pwg.on("draw.select", (e) => {
     console.log("选择", e.featureId);
-  })
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" || event.key === "Esc") {
+      pwg.changeMode('none')
+    }
+  });
 });
 </script>
 
@@ -67,7 +73,11 @@ onMounted(() => {
     <div id="sidebar">
       <div class="sidebar-header">对象列表</div>
       <select id="h_create_calss_list" multiple @change="onCreateClassChanged">
-        <option v-for="(build, index) in builds" :key="index" :value="build.name">
+        <option
+          v-for="(build, index) in builds"
+          :key="index"
+          :value="build.name"
+        >
           {{ build.label }}
         </option>
       </select>
