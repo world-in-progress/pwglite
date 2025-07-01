@@ -7,7 +7,11 @@ export default class pwglite {
   _scene = null;
   _uicontext = null;
   _builds = [];
+
   _createCallback = null;
+  _removeCallback = null;
+  _activeCallback = null;
+
   _activeFeature = null;
 
   constructor(map) {
@@ -26,12 +30,23 @@ export default class pwglite {
     this._builds = pwg.graphics.builds;
 
     this._uicontext.uitool = this._uicontext.tools["editing"];
-    this._overLayer.on = function (n, e) {
+    this._overLayer.on = (n, e) => {
       if (n === "child-added") {
-        that._createCallback({featureId: e.child.id});
+        if (this._createCallback) {
+          this._createCallback({ featureId: e.child.id });
+        }
       }
       if (n === "child-removed") {
-        that._removeCallback(e);
+        if (this._removeCallback) {
+          this._removeCallback({ featureId: e.child.id });
+        }
+      }
+      if (n === "ui.ActiveObjectChanged") {
+        if (this._activeCallback) {
+          this._activeCallback({
+            featureId: e.current === null ? null : e.current.id,
+          });
+        }
       }
     };
     pwg.worker = new Worker(new URL("./pwg-worker.js", import.meta.url), {
@@ -67,7 +82,7 @@ export default class pwglite {
     const build = this._builds.find((item) => item.constructor.name === name);
     let uicontext = this._uicontext;
     uicontext.creatingBuild = build;
-    this._setUiTool("creating")
+    this._setUiTool("creating");
   }
 
   _setUiTool(name) {
@@ -93,12 +108,15 @@ export default class pwglite {
     if (eventName === "draw.remove") {
       this._removeCallback = callback;
     }
+    if (eventName === "draw.select") {
+      this._activeCallback = callback;
+    }
   }
 
   changeMode(mode, options = {}) {
     if (mode === "create") {
       if (options.name) {
-        this._setUiTool("creating")
+        this._uicontext.activeObject = null;
         this._activateBuild(options.name);
       }
     }
@@ -108,7 +126,7 @@ export default class pwglite {
           (item) => item.id === options.featureId
         );
         if (feature) {
-          this._setUiTool("editing")
+          this._setUiTool("editing");
           this._uicontext.activeObject = feature;
         }
       }

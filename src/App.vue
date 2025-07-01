@@ -37,8 +37,8 @@ onMounted(() => {
     zoom: 14,
     minZoom: 1,
     center: [118.626926, 28.737245],
-    pitchWithRotate: false,
-    dragRotate: false,
+    // pitchWithRotate: false,
+    // dragRotate: false,
     style: "mapbox://styles/mapbox/streets-v9",
   });
 
@@ -47,13 +47,17 @@ onMounted(() => {
   builds.value = pwg.getAllBuilds();
 
   pwg.on("draw.create", (e) => {
-    pwg.changeMode("edit", {featureId: e})
+    pwg.changeMode("edit", e)
     console.log(pwg.getAllFeatures());
   });
 
   pwg.on("draw.remove", (e) => {
-    console.log(e);
+    console.log("已删除", e.featureId);
   });
+
+  pwg.on("draw.select", (e) => {
+    console.log("选择", e.featureId);
+  })
 });
 </script>
 
