@@ -2,14 +2,14 @@
 import mapboxgl from "mapbox-gl";
 import { ref, onMounted } from "vue";
 // import pwg from "@/utils/core/pwg/pwg-module";
-import pwglite from "@/utils/core/pwg/pwglite";
+import PWGLite from "@/utils/core/pwg/pwglite";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiZmxpY2tlcjA1NiIsImEiOiJjbGd4OXM1c3cwOWs3M21ta2RiMDhoczVnIn0.lE8NriBf_g3RZWCusw_mZA";
 
 const mapContainer = ref(null);
 const builds = ref<{ name: string; label: string }[]>([]);
-let pwg;
+let pwg: PWGLite | undefined;
 // const builds = ref([
 //   "建筑物",
 //   "道路",
@@ -27,7 +27,7 @@ const onCreateClassChanged = (event: Event) => {
     const item = selectedOptions[i];
     console.log("选中对象：", item.textContent);
     // pwg.activateBuild(item.textContent)
-    pwg.changeMode("create", { name: item.value });
+    pwg?.changeMode("create", { name: item.value });
   }
 };
 
@@ -42,14 +42,15 @@ onMounted(() => {
     style: "mapbox://styles/mapbox/streets-v9",
   });
 
-  pwg = new pwglite(map);
+  pwg = new PWGLite(map);
 
   builds.value = pwg.getAllBuilds();
 
   pwg.on("draw.create", (e) => {
-    pwg.changeMode("edit", e)
-    console.log(pwg.getAllFeatures());
+    pwg?.changeMode("edit", e);
+    console.log(pwg?.getAllFeatures());
   });
+
 
   pwg.on("draw.remove", (e) => {
     console.log(e);
