@@ -3,10 +3,11 @@
 */
 if(typeof pwg =='undefined')
     pwg={};
-pwg.initialize=function(paper)
+pwg.initialize=function(_paper)
 {
-    pwg.base(paper);
-    pwg.drawing(paper);
+    paper = _paper;
+    pwg.base(_paper);
+    pwg.drawing(_paper);
     pwg.math();
     pwg.utils();
     pwg.json();

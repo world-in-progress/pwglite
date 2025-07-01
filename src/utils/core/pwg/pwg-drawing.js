@@ -35,7 +35,7 @@ pwg.drawing = function (paper) {
     //Image = typeof window != 'undefined' ? window.Image : WorkerImageProxy;
     if(typeof Image === 'undefined')
     {
-        Image=WorkerImageProxy;
+        self.Image=WorkerImageProxy;
     }
 
     var that = pwg.drawing;

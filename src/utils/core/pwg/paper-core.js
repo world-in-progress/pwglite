@@ -15728,3 +15728,5 @@ if (typeof define === 'function' && define.amd) {
 
 return paper;
 }.call(this, typeof self === 'object' ? self : null);
+
+export default paper;

@@ -903,12 +903,14 @@ pwg.route = function () {
 
     ////////////////////////////////////////////////////////////
     function JointsBeam(mode) {
-        this.mode = mode ? mode : "local";
-        this.O = null;
-        this.interval = 1;
-        this.direction = new pwg.point(1, 0);
-        this.count = 1;
-        this.locations = [];
+        var self = this || globalThis;
+
+        self.mode = mode ? mode : "local";
+        self.O = null;
+        self.interval = 1;
+        self.direction = new pwg.point(1, 0);
+        self.count = 1;
+        self.locations = [];
     }
     JointsBeam.prototype.constructor = JointsBeam();
     JointsBeam._layouts = {

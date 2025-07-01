@@ -1,41 +1,32 @@
 <script setup lang="ts">
 import mapboxgl from "mapbox-gl";
 import { ref, onMounted } from "vue";
-import pwg from "@/utils/core/pwg/pwg-module";
+// import pwg from "@/utils/core/pwg/pwg-module";
+import pwglite from "@/utils/core/pwg/pwglite"
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiZmxpY2tlcjA1NiIsImEiOiJjbGd4OXM1c3cwOWs3M21ta2RiMDhoczVnIn0.lE8NriBf_g3RZWCusw_mZA";
 
 const mapContainer = ref(null);
 const builds = ref<{ type: string }[]>([]);
-
-export interface Build {
-  type: string;
-  otherprops?: any;
-}
-
-const buildTypes = [
-  "建筑物",
-  "道路",
-  "桥梁",
-  "隧道",
-  "公园",
-  "水体",
-  "绿地",
-  "其他",
-];
-
-const initBuilds = () => {
-  builds.value = buildTypes.map((type) => ({
-    type,
-  }));
-};
+let pwg;
+// const builds = ref([
+//   "建筑物",
+//   "道路",
+//   "桥梁",
+//   "隧道",
+//   "公园",
+//   "水体",
+//   "绿地",
+//   "其他",
+// ]);
 
 const onCreateClassChanged = (event: Event) => {
   const selectedOptions = (event.target as HTMLSelectElement).selectedOptions;
   for (let i = 0; i < selectedOptions.length; i++) {
     const item = selectedOptions[i];
     console.log("选中对象：", item.textContent);
+    pwg.activateBuild(item.textContent)
   }
 };
 
@@ -50,7 +41,9 @@ onMounted(() => {
     style: "mapbox://styles/mapbox/streets-v9",
   });
 
-  initBuilds();
+  pwg = new pwglite(map)
+
+  builds.value = pwg.getAllBuilds();
 });
 </script>
 
@@ -67,9 +60,8 @@ onMounted(() => {
         <option
           v-for="(build, index) in builds"
           :key="index"
-          :value="build.type"
         >
-          {{ build.type }}
+          {{ build }}
         </option>
       </select>
     </div>

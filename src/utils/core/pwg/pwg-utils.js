@@ -130,7 +130,7 @@ pwg.utils = function () {
     }
     that.getXml = getXml;
 
-    XmlConstants = {
+    let XmlConstants = {
         NODETYPE_ELEMENT: 1,
         NODETYPE_ATTRIBUTE: 2,
         NODETYPE_TEXT: 3,

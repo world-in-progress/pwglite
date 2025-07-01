@@ -1,5 +1,8 @@
-importScripts("/pwg/paper-core.js");
-importScripts("/pwg/pwg-module.js");
+// importScripts(new URL('./paper-core.js', import.meta.url));
+// importScripts(new URL('./pwg-module.js', import.meta.url));
+import paper from './paper-core.js';
+import pwg from './pwg-module.js';
+
 self.onmessage = function (message) {
     message = message.data;
     if (message.name == "image-load") {

@@ -5,7 +5,10 @@ pwg graphics lib wenyongning@njnu.edu.cn
 /*
     pwg-base.js
 */
+
+
 let pwg;
+let paper;
 
 if (typeof pwg === 'undefined')
     pwg = {};
@@ -1134,7 +1137,7 @@ pwg.utils = function () {
     }
     that.getXml = getXml;
 
-    XmlConstants = {
+    let XmlConstants = {
         NODETYPE_ELEMENT: 1,
         NODETYPE_ATTRIBUTE: 2,
         NODETYPE_TEXT: 3,
@@ -1933,7 +1936,7 @@ pwg.drawing = function (paper) {
     //Image = typeof window != 'undefined' ? window.Image : WorkerImageProxy;
     if(typeof Image === 'undefined')
     {
-        Image=WorkerImageProxy;
+        self.Image=WorkerImageProxy;
     }
 
     var that = pwg.drawing;
@@ -4151,7 +4154,7 @@ pwg.graphics.base = function () {
         var context = this.getContainerContext();
         var offsetloc = this._offset_location;
         offsetloc.update();
-        offset = offsetloc.offset;
+        let offset = offsetloc.offset;
         this._offsetTRS.make(offset.t, offset.r, offset.s * context.pointAdjustRatio, this.pivot.point);
 
         this._TRS.M = this._frameTRS.M.appended(this._offsetTRS.M);
@@ -6946,12 +6949,14 @@ pwg.route = function () {
 
     ////////////////////////////////////////////////////////////
     function JointsBeam(mode) {
-        this.mode = mode ? mode : "local";
-        this.O = null;
-        this.interval = 1;
-        this.direction = new pwg.point(1, 0);
-        this.count = 1;
-        this.locations = [];
+        var self = this || globalThis;
+
+        self.mode = mode ? mode : "local";
+        self.O = null;
+        self.interval = 1;
+        self.direction = new pwg.point(1, 0);
+        self.count = 1;
+        self.locations = [];
     }
     JointsBeam.prototype.constructor = JointsBeam();
     JointsBeam._layouts = {
@@ -12491,12 +12496,14 @@ pwg graphics lib wenyongning@njnu.edu.cn
 /*
     pwg-module-inline.js
 */
+
 if(typeof pwg =='undefined')
     pwg={};
-pwg.initialize=function(paper)
+pwg.initialize=function(_paper)
 {
-    pwg.base(paper);
-    pwg.drawing(paper);
+    paper = _paper;
+    pwg.base(_paper);
+    pwg.drawing(_paper);
     pwg.math();
     pwg.utils();
     pwg.json();

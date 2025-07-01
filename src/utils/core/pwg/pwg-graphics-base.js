@@ -512,7 +512,7 @@ pwg.graphics.base = function () {
         var context = this.getContainerContext();
         var offsetloc = this._offset_location;
         offsetloc.update();
-        offset = offsetloc.offset;
+        let offset = offsetloc.offset;
         this._offsetTRS.make(offset.t, offset.r, offset.s * context.pointAdjustRatio, this.pivot.point);
 
         // function printMatrix(label, m) {
