@@ -4,7 +4,7 @@ import mapboxgl from "mapbox-gl";
 
 let pwgInitialized = false;
 
-export default class pwglite {
+export default class PWGDraw {
   _overLayer = null;
   _scene = null;
   _uicontext = null;
@@ -17,7 +17,6 @@ export default class pwglite {
   _activeFeature = null;
 
   constructor(map) {
-
     // 确保pwg为单例
     if (!pwgInitialized) {
       pwg.ROOT_PATH = "";
@@ -39,7 +38,7 @@ export default class pwglite {
 
     this._uicontext.uitool = this._uicontext.tools["editing"];
     this._overLayer.on = (n, e) => {
-      // console.log(n, e)
+      console.log(n, e);
       if (n === "child-added") {
         if (this._createCallback) {
           this._createCallback({ featureId: e.child.id });
@@ -91,7 +90,7 @@ export default class pwglite {
     const build = this._builds.find((item) => item.constructor.name === name);
     let uicontext = this._uicontext;
     uicontext.creatingBuild = build;
-    this._setUiTool("creating")
+    this._setUiTool("creating");
   }
 
   _setUiTool(name) {
@@ -107,7 +106,24 @@ export default class pwglite {
         type: item.constructor.name,
       };
     });
-    // return this._scene.children.map(item => item)
+  }
+
+  removeFeatureById(id) {
+    let feature = this._scene.children.find((item) => item.id === id);
+    if (feature) {
+      var result = this._scene.tryDeleteObject(feature);
+      if (!result.succeed) {
+        console.warn("DELETE FAILED:" + result.message);
+        return false;
+      } else {
+        let activeObject = this._uicontext.activeObject;
+        if (activeObject && activeObject.id === id) {
+          this._uicontext.activeObject = null;
+        }
+        this._overLayer.render();
+        return true;
+      }
+    }
   }
 
   on(eventName, callback) {
@@ -125,7 +141,7 @@ export default class pwglite {
   changeMode(mode, options = {}) {
     if (mode === "create") {
       if (options.name) {
-        this._setUiTool("creating")
+        this._uicontext.activeObject = null;
         this._activateBuild(options.name);
       }
     }
@@ -135,13 +151,15 @@ export default class pwglite {
           (item) => item.id === options.featureId
         );
         if (feature) {
-          this._setUiTool("editing")
+          this._setUiTool("editing");
           this._uicontext.activeObject = feature;
+          this._overLayer.render();
         }
       }
     }
     if (mode === "none") {
-      this._setUiTool("info")
+      this._setUiTool("info");
+      this._overLayer.render();
     }
   }
 }

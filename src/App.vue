@@ -1,22 +1,19 @@
 <script setup lang="ts">
 import mapboxgl from "mapbox-gl";
 import { ref, onMounted } from "vue";
-// import pwg from "@/utils/core/pwg/pwg-module";
-import PWGLite from "@/utils/core/pwg/pwglite";
+import PWGDraw from "@/utils/core/pwg/pwg-draw";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiZmxpY2tlcjA1NiIsImEiOiJjbGd4OXM1c3cwOWs3M21ta2RiMDhoczVnIn0.lE8NriBf_g3RZWCusw_mZA";
 
 const mapContainer = ref(null);
 const builds = ref<{ name: string; label: string }[]>([]);
-// 用户绘制的图形列表
-const features = ref<any[]>([]);
-// 高亮特征的ID
+const features = ref<{ id: string; type: string }[]>([]);
+
 const highlightedFeatureId = ref<string | null>(null);
-// 跟踪隐藏的特征
 const hiddenFeatures = ref<Set<string>>(new Set());
 
-let pwg: PWGLite | undefined;
+let pwg: PWGDraw | undefined;
 
 const onCreateClassChanged = (event: Event) => {
   const selectedOptions = (event.target as HTMLSelectElement).selectedOptions;
@@ -29,41 +26,31 @@ const onCreateClassChanged = (event: Event) => {
   }
 };
 
-// 选中feature时激活编辑模式
-const onFeatureSelected = (feature: any) => {
-  console.log("选中要编辑的对象：", feature);
-  // 设置当前高亮的特征ID
-  highlightedFeatureId.value = feature.id;
-  pwg?.changeMode("edit", feature);
+const selectFeatureById = (id: string) => {
+  highlightedFeatureId.value = id;
+  pwg?.changeMode("edit", { featureId: id });
 };
 
-// 删除选中的feature
-const deleteFeature = (feature: any, event: Event) => {
-  // 阻止事件冒泡，避免触发选中事件
-  event.stopPropagation();
-  console.log("删除对象：", feature);
-  //pwg?.removeFeature(feature.id);
-  // 如果删除的是高亮特征，清除高亮状态
-  if (highlightedFeatureId.value === feature.id) {
+const deleteFeatureById = (id: string) => {
+  if (highlightedFeatureId.value === id) {
     highlightedFeatureId.value = null;
   }
+  let result = pwg?.removeFeatureById(id);
+  console.log(result)
 };
 
 // 切换feature的显隐状态
-const toggleFeatureVisibility = (feature: any, event: Event) => {
-  // 阻止事件冒泡，避免触发选中事件
-  event.stopPropagation();
-  
-  if (hiddenFeatures.value.has(feature.id)) {
+const toggleFeatureVisibility = (id: string) => {
+
+  if (hiddenFeatures.value.has(id)) {
     // 如果特征已隐藏，则显示它
-    hiddenFeatures.value.delete(feature.id);
-    //pwg?.showFeature(feature.id);
-    console.log("显示对象：", feature);
+    hiddenFeatures.value.delete(id);
+    console.log("显示对象：", id);
   } else {
     // 如果特征可见，则隐藏它
-    hiddenFeatures.value.add(feature.id);
+    hiddenFeatures.value.add(id);
     //pwg?.hideFeature(feature.id);
-    console.log("隐藏对象：", feature);
+    console.log("隐藏对象：", id);
   }
 };
 
@@ -85,42 +72,39 @@ onMounted(() => {
     style: "mapbox://styles/mapbox/streets-v9",
   });
 
-  pwg = new PWGLite(map);
+  pwg = new PWGDraw(map);
 
   builds.value = pwg.getAllBuilds();
 
   pwg.on("draw.create", (e) => {
-    pwg.changeMode("edit", e);
-    console.log(pwg.getAllFeatures());
+    updateFeaturesList();
+    highlightedFeatureId.value = e.featureId;
+    pwg?.changeMode("edit", e);
   });
 
   pwg.on("draw.remove", (e) => {
-    console.log("已删除", e.featureId);
+    updateFeaturesList();
+    if (highlightedFeatureId.value === e.featureId) {
+      highlightedFeatureId.value = null;
+    }
   });
 
   pwg.on("draw.select", (e) => {
-    console.log("选择", e.featureId);
+    highlightedFeatureId.value = e.featureId;
   });
 
   window.addEventListener("keydown", (event) => {
     if (event.key === "Escape" || event.key === "Esc") {
-      pwg.changeMode('none')
+      pwg?.changeMode("none");
     }
   });
 
-  pwg.on("draw.update", () => {
-    // 更新features列表
-    updateFeaturesList();
-  });
-  
-  // 初始化特征列表
   updateFeaturesList();
 });
 </script>
 
 <template>
   <div id="app">
-    <!-- 侧边栏 -->
     <div id="sidebar">
       <div class="sidebar-header">对象列表</div>
       <select id="h_create_calss_list" multiple @change="onCreateClassChanged">
@@ -133,43 +117,40 @@ onMounted(() => {
         </option>
       </select>
 
-      <!-- 用户绘制的图形列表 -->
-      <div class="sidebar-header" style="margin-top: 15px;">绘制对象列表</div>
+      <div class="sidebar-header" style="margin-top: 15px">绘制对象列表</div>
       <div id="features-list">
-        <div 
-          v-for="(feature, index) in features" 
-          :key="feature.id" 
+        <div
+          v-for="(feature, index) in features"
+          :key="feature.id"
           class="feature-item"
           :class="{
             'feature-highlighted': feature.id === highlightedFeatureId,
-            'feature-hidden': hiddenFeatures.has(feature.id)
+            'feature-hidden': hiddenFeatures.has(feature.id),
           }"
-          @click="onFeatureSelected(feature)"
+          @click="selectFeatureById(feature.id)"
         >
           <div class="feature-content">
-            {{ feature.properties?.name || feature.properties?.type || '未命名对象' }} #{{ index + 1 }}
+            {{ feature.id }}
           </div>
           <div class="feature-actions">
-            <button 
-              class="feature-action-btn visibility-btn" 
-              :title="hiddenFeatures.has(feature.id) ? '显示' : '隐藏'" 
-              @click="toggleFeatureVisibility(feature, $event)"
+            <button
+              class="feature-action-btn visibility-btn"
+              :title="hiddenFeatures.has(feature.id) ? '显示' : '隐藏'"
+              @click.stop="toggleFeatureVisibility(feature.id)"
             >
               <span v-if="hiddenFeatures.has(feature.id)">👁️‍🗨️</span>
               <span v-else>👁️</span>
             </button>
-            <button 
-              class="feature-action-btn delete-btn" 
-              title="删除" 
-              @click="deleteFeature(feature, $event)"
+            <button
+              class="feature-action-btn delete-btn"
+              title="删除"
+              @click.stop="deleteFeatureById(feature.id)"
             >
               🗑️
             </button>
           </div>
         </div>
-        <div v-if="features.length === 0" class="no-features">
-          暂无绘制对象
-        </div>
+        <div v-if="features.length === 0" class="no-features">暂无绘制对象</div>
       </div>
     </div>
 
