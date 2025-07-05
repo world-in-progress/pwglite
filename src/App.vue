@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import mapboxgl from "mapbox-gl";
 import { ref, onMounted } from "vue";
-import PWGDraw from "@/utils/core/pwg/pwg-draw";
+import PWGDraw from "@/utils/core/pwg-draw";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiZmxpY2tlcjA1NiIsImEiOiJjbGd4OXM1c3cwOWs3M21ta2RiMDhoczVnIn0.lE8NriBf_g3RZWCusw_mZA";
@@ -36,12 +36,11 @@ const deleteFeatureById = (id: string) => {
     highlightedFeatureId.value = null;
   }
   let result = pwg?.removeFeatureById(id);
-  console.log(result)
+  console.log(result);
 };
 
 // 切换feature的显隐状态
 const toggleFeatureVisibility = (id: string) => {
-
   if (hiddenFeatures.value.has(id)) {
     // 如果特征已隐藏，则显示它
     hiddenFeatures.value.delete(id);

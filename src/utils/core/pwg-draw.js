@@ -1,5 +1,5 @@
-import pwg from "./pwg-module";
-import paper from "./paper-core";
+import pwg from "./pwg/pwg-module";
+import paper from "./pwg/paper-core";
 import mapboxgl from "mapbox-gl";
 
 let pwgInitialized = false;

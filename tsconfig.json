@@ -18,5 +18,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/utils/core/pwg/pwg-draw.js", "src/utils/core/pwg/pwg-draw.js"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/utils/core/pwg-draw.js", "src/utils/core/pwg-draw.js"],
 }
