@@ -28,7 +28,8 @@ files =\
 """
 
 base= path.dirname(__file__)+"/"
-o = open(base+"pwg-module.js",'w+')
+o = open(base+"pwg-module.js",'w+', encoding="utf-8")
+o.write("let pwg;let paper;\n")
 memo=("/*\n")
 memo+=("pwg graphics lib wenyongning@njnu.edu.cn\n")
 memo+=("编译时间:"+str(datetime.datetime.now())+"\n")
@@ -36,9 +37,10 @@ memo+=("*/\n")
 #o.write(memo)
 files = files.split()
 for fn in files:
-    fi = open(base+fn.strip())
+    fi = open(base+fn.strip(), encoding="utf-8")
     o.write(memo)
     lines = fi.read()+"\n\n\n"
     o.write(lines)
     fi.close()
+o.write("export default pwg\n")
 o.close()

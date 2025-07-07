@@ -1,15 +1,11 @@
+let pwg;let paper;
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 /*
     pwg-base.js
 */
-
-
-let pwg;
-let paper;
-
 if (typeof pwg === 'undefined')
     pwg = {};
 pwg.ROOT_PATH="";
@@ -192,7 +188,7 @@ pwg.base = function (paper) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 /*
     pwg-math.js
@@ -1003,7 +999,7 @@ pwg.math = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 /*
     pwg-utils.js
@@ -1897,7 +1893,7 @@ pwg.utils = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 /*
     pwg-canvas-render-engine.js
@@ -2949,13 +2945,15 @@ pwg.drawing = function (paper) {
         }
     };
     using_image_item.prototype.updateMatrixOnly = function () {
+
         if (this._matrixDirty) {
             this._M.reset();
             this._M.scale(pwg.DEVICE_PIXEL_RATIO);
             if (this._matrix)
                 this._M.append(this._matrix);
-            if (this.inlineMatrix)
+            if (this.inlineMatrix) {
                 this._M = this._M.append(this.inlineMatrix);
+            }
             this._I = this._M.inverted();
             this._matrixDirty = false;
         }
@@ -3025,7 +3023,7 @@ pwg.drawing = function (paper) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 if (typeof pwg == "undefined")
     pwg = {}
@@ -3140,7 +3138,7 @@ pwg.styles = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 if(typeof pwg=="undefined")
 pwg={};
@@ -3258,7 +3256,7 @@ pwg.json=function(){
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -3641,7 +3639,7 @@ pwg.location = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 if (typeof pwg == 'undefined')
     pwg = {};
@@ -3840,6 +3838,7 @@ pwg.graphics.base = function () {
     };
     //action=down|move|up|post|delete
     UiHandle.prototype.update = function (e, action) {
+        console.log('update', this, e, action)
         return this.owner._do_ui_handle_update(this, e, pwg.defaultValue(action, 'move'));
     };
     UiHandle.prototype.commit = function () {
@@ -3973,6 +3972,7 @@ pwg.graphics.base = function () {
         }
     };
     Group.prototype.raiseEvent = function (name, e) {
+        
         if (this.owner) {
             this.owner.raiseEvent(name, e);
         }
@@ -4151,6 +4151,7 @@ pwg.graphics.base = function () {
     PointGraphics.prototype._updateMatrix = function () {
         this._location.update();
         var frameloc = this._location;
+
         this._frameTRS.make(frameloc.pixel, frameloc.angle, 1);
         var context = this.getContainerContext();
         var offsetloc = this._offset_location;
@@ -4158,6 +4159,20 @@ pwg.graphics.base = function () {
         let offset = offsetloc.offset;
         this._offsetTRS.make(offset.t, offset.r, offset.s * context.pointAdjustRatio, this.pivot.point);
 
+        // function printMatrix(label, m) {
+        //     // 假设 m 有 a, b, c, d, tx, ty 属性
+        //     console.log(`${label}:`);
+        //     console.log(
+        //         `[ ${m.a}, ${m.c}, ${m.tx} ]\n` +
+        //         `[ ${m.b}, ${m.d}, ${m.ty} ]\n` +
+        //         `[ 0, 0, 1 ]`
+        //     );
+        // }
+        
+        // // 在 _updateMatrix 方法中调用
+        // printMatrix('_frameTRS.M', this._frameTRS.M);
+        // printMatrix('_offsetTRS.M', this._offsetTRS.M);
+        
         this._TRS.M = this._frameTRS.M.appended(this._offsetTRS.M);
         this._TRS.I = this._TRS.M.inverted();
     };
@@ -4351,7 +4366,7 @@ pwg.graphics.base = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -4696,7 +4711,7 @@ pwg.graphics.frame = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 /*
     pwg-scene.js
@@ -4734,6 +4749,7 @@ pwg.graphics.scene = function () {
             cache.sort(function (a, b) {
                 return a.depth_runtime - b.depth_runtime;
             });
+
         } else {
             cache = this._children_flatten_cache;
         }
@@ -5020,7 +5036,7 @@ pwg.graphics.scene = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -6043,7 +6059,7 @@ if (!pwg.cad) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 /*
     pwg-route.js
@@ -7064,9 +7080,9 @@ pwg.route = function () {
     pwg.inherits(AlineJoints, pwg.Graphics);
     pwg.defineClassId(AlineJoints, "pwg.AlineJoints");
     AlineJoints.prototype.initialize = function (ea, eb, count, padding) {
-        this._locationA.set(ea);
-        this._locationB.set(eb);
-        this._beam.reset(this, count);
+        this._locationA.set(ea);        // 起点
+        this._locationB.set(eb);        // 终点
+        this._beam.reset(this, count);      // 重置接线柱分布
         this._padding = padding ? padding : 0;
         this._dirty = true;
     };
@@ -7235,6 +7251,7 @@ pwg.route = function () {
     AlineJointsBuild.prototype.post = function () {
         if (this._creating) {
             this._context.container.addChild(this._creating);
+            console.log(this._context.container)
             this._creating = null;
         }
     };
@@ -7251,7 +7268,7 @@ pwg.route = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 /*
     pwg-xpath.js
@@ -7459,7 +7476,7 @@ pwg.xpath = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 /*
     pwg-xlabel.js
@@ -8488,7 +8505,7 @@ pwg.xlabel = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 //import { Bezier } from "bezier-js/dist/bezier.js"
 if (typeof pwg == 'undefined')
@@ -10543,7 +10560,7 @@ pwg.tube = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -10583,13 +10600,13 @@ pwg.tower = function () {
         this._interval0 = bounds.width / 2.0;
         this._jointA = new pwg.AbsoluteLocation(this, "joint-A", "pixel");
         this._jointA.joint = new pwg.Joint("point");
-        this._jointA._counter=0;
+        this._jointA._counter = 0;
         this._jointB = new pwg.AbsoluteLocation(this, "joint-B", "pixel");
         this._jointB.joint = new pwg.Joint("point");
-        this._jointB._counter=0;
+        this._jointB._counter = 0;
         this._jointC = new pwg.AbsoluteLocation(this, "joint-C", "pixel");
         this._jointC.joint = new pwg.Joint("point");
-        this._jointC._counter=0;
+        this._jointC._counter = 0;
 
         this._joints = [this._jointA, this._jointC, this._jointB];
         this.groupAdjustRatio = 1.0;
@@ -10606,12 +10623,11 @@ pwg.tower = function () {
             this.offset.s = 1.0;
             interval *= this.groupAdjustRatio;
         }
-        pwg.PointGraphics.prototype.update.call(this,all);
+        pwg.PointGraphics.prototype.update.call(this, all);
         var x = -interval;
         for (var i = 0; i < 3; i++) {
             var joint = this._joints[i];
-            if(all||joint._use_counter>0)
-            {
+            if (all || joint._use_counter > 0) {
                 joint.point = this.baseToPixel(new pwg.point(x, 0));
                 joint.angle = this.offset.angle;
                 joint.update();
@@ -10619,17 +10635,14 @@ pwg.tower = function () {
             x += interval;
         }
     };
-    Tower.prototype.updateForceJoint=function()
-    {
+    Tower.prototype.updateForceJoint = function () {
         this.update(true);
     };
-    Tower.prototype._use_location=function(loc)
-    {
+    Tower.prototype._use_location = function (loc) {
         loc._counter++;
     };
 
-    Tower.prototype._release_location=function(loc)
-    {
+    Tower.prototype._release_location = function (loc) {
         loc._counter--;
     };
 
@@ -10640,16 +10653,15 @@ pwg.tower = function () {
     Tower.prototype._get_handles = function () {
         var handles = this._handles;
         if (this.owner && this.owner.classid == TowerAlineGroup.classid) {
-            return [handles[0],this._annotation._handles[1]];
-        } else 
-        {
+            return [handles[0], this._annotation._handles[1]];
+        } else {
             return [this._annotation._handles[1]].concat(handles);
         }
     };
 
     Tower.prototype.hitTest = function (e, option) {
-        if(!this._visibility)
-            return ;
+        if (!this._visibility)
+            return;
         var hit = this._icon.hitTest(e.pixel, pwg.drawing.default_paper_param);
         if (hit) {
             return {
@@ -10663,9 +10675,9 @@ pwg.tower = function () {
     };
 
     Tower.prototype.render = function (drawing, pass) {
-        if(!this._visibility)
-            return ;
-        this._annotation.render(drawing,pass);
+        if (!this._visibility)
+            return;
+        this._annotation.render(drawing, pass);
         if (pass == "entity") {
             drawing.begin();
             var param = drawing.default_paper_param;
@@ -10759,6 +10771,11 @@ pwg.tower = function () {
     TowerXBuild.prototype.getLocationMode = function () {
         return this._options.locationMode;
     };
+
+    TowerXBuild.prototype.addFromData = function (e) {
+        this._context.container.addChild(this.create(this._context.container, e));
+    }
+
     TowerXBuild.prototype.update = function (e, action) {
         if (action == "down") {
             if (!this._creating) {
@@ -10833,7 +10850,7 @@ pwg.tower = function () {
         this._handle_move_insert = new pwg.UiHandle(this, "handle.move", "", "simple");
         this._handle_move_insert.locationMode = "joint";
         this._handles = [this._add_head_handle, this._add_tail_handle];
-        this._hash_locations=new pwg.point();
+        this._hash_locations = new pwg.point();
     }
     pwg.inherits(TowerAlineGroup, pwg.Group);
     pwg.defineClassId(TowerAlineGroup, "pwg.TowerAlineGroup");
@@ -10856,8 +10873,8 @@ pwg.tower = function () {
     };
 
     TowerAlineGroup.prototype.removeChild = function (o) {
-        
-        var b = pwg.Group.prototype.removeChild.call(this,o);
+
+        var b = pwg.Group.prototype.removeChild.call(this, o);
         var ix;
         if ((ix = this._towers.indexOf(o)) != -1) {
             this._towers.splice(ix, 1);
@@ -10865,10 +10882,10 @@ pwg.tower = function () {
         return b;
     };
 
-    TowerAlineGroup.prototype.makeInlineRoute = function (nloc,routeType) {
+    TowerAlineGroup.prototype.makeInlineRoute = function (nloc, routeType) {
         var towers = this._towers;
         //var route =  this.container.createGraphics(pwg.Route.classid);
-        var route = pwg.graphics.getBuild(routeType).create(this.container,[]);
+        var route = pwg.graphics.getBuild(routeType).create(this.container, []);
         for (var i = 0, l = towers.length; i < l; i++) {
             var tower = towers[i];
             route.add(tower.getLocation(nloc));
@@ -10876,8 +10893,7 @@ pwg.tower = function () {
         this.addChild(route);
     };
 
-    function make_hash_locations(towers)
-    {
+    function make_hash_locations(towers) {
         var loc = new pwg.point();
         if (towers.length < 2)
             return loc;
@@ -10885,8 +10901,8 @@ pwg.tower = function () {
         for (var i = 0, n = towers.length; i < n; i++) {
             var tw = towers[i];
             var p = tw.location.lonlat;
-            loc.x+=p.x;
-            loc.y+=p.y;
+            loc.x += p.x;
+            loc.y += p.y;
         }
         return loc;
     }
@@ -10948,17 +10964,15 @@ pwg.tower = function () {
         var towers = this._towers;
         //此处代码包含了避免重新计算角度的逻辑。
         var last_hash_location = make_hash_locations(towers);
-        if(!this._hash_locations.equals(last_hash_location)||all)
-        {
+        if (!this._hash_locations.equals(last_hash_location) || all) {
             for (var i = 0, l = towers.length; i < l; i++) {
                 towers[i].updateOnlyLocation();
             }
             this._outline = calc_aline_direction_adjust_ratio(this._towers);
 
-            this._hash_locations=last_hash_location;
+            this._hash_locations = last_hash_location;
         }
-        else
-        {
+        else {
             this._outline = make_towers_only_pline(this._towers);
         }
 
@@ -11057,40 +11071,33 @@ pwg.tower = function () {
         }
     };
 
-    TowerAlineGroup.prototype.depth=function()
-    {
+    TowerAlineGroup.prototype.depth = function () {
         var towers = this._towers;
         var d = 0;
-        for(var i=0,l=towers.length;i<l;i++)
-        {
+        for (var i = 0, l = towers.length; i < l; i++) {
             var t = towers[i];
-            d=Math.max(t.depth(),d);
+            d = Math.max(t.depth(), d);
         }
-        return d+1;
+        return d + 1;
     };
 
-    TowerAlineGroup.prototype.isDep=function(o)
-    {
+    TowerAlineGroup.prototype.isDep = function (o) {
         var towers = this._towers;
         var d = 0;
-        for(var i=0,l=towers.length;i<l;i++)
-        {
+        for (var i = 0, l = towers.length; i < l; i++) {
             var t = towers[i];
-            if(t==o||t.isDep(o))
-            return true;
+            if (t == o || t.isDep(o))
+                return true;
         }
         return false;
     };
 
-    TowerAlineGroup.prototype.removeDep=function(o)
-    {
+    TowerAlineGroup.prototype.removeDep = function (o) {
         var towers = this._towers;
         var d = 0;
-        for(var i=0,l=tower.length;i<l;i++)
-        {
+        for (var i = 0, l = tower.length; i < l; i++) {
             var t = towers[i];
-            if(t==o)
-            {
+            if (t == o) {
                 this.removeChild(o);
                 return true;
             }
@@ -11104,7 +11111,7 @@ pwg.tower = function () {
             drawing.resetTransform();
             drawing.drawEx(this._outline, pwg.styles.get("tower-aline-group.default"));
             drawing.end();
-        } else if (pass == "ui"||pass=="hot"||pass=="debug") {
+        } else if (pass == "ui" || pass == "hot" || pass == "debug") {
             drawing.begin();
             drawing.resetTransform();
             var outline = this._outline;
@@ -11130,8 +11137,7 @@ pwg.tower = function () {
             }
             drawing.end();
         }
-        if( pass!="ui"&& pass!="hot")
-        {
+        if (pass != "ui" && pass != "hot") {
             pwg.Group.prototype.render.call(this, drawing, pass);
         }
     };
@@ -11227,9 +11233,9 @@ pwg.tower = function () {
 
     TowerAlineGroupBuild.prototype.post = function (e, action) {
         if (this._creating) {
-            this._creating.makeInlineRoute("joint-A",this.routeType);
-            this._creating.makeInlineRoute("joint-B",this.routeType);
-            this._creating.makeInlineRoute("joint-C",this.routeType);
+            this._creating.makeInlineRoute("joint-A", this.routeType);
+            this._creating.makeInlineRoute("joint-B", this.routeType);
+            this._creating.makeInlineRoute("joint-C", this.routeType);
             this._context.container.addChild(this._creating);
         }
         this._creating = null;
@@ -11258,16 +11264,16 @@ pwg.tower = function () {
     };
     //////////////////////////////////////////////////////////
     var bounds = new pwg.rectangle(-16, -16, 32, 32);
-    registerTowerXBuild("钢管杆(耐张)", "钢管杆(耐张)", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/钢管杆(耐张).svg", bounds: bounds });
-    registerTowerXBuild("钢管杆(直线)", "钢管杆(直线)", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/钢管杆(直线).svg", bounds: bounds });
-    registerTowerXBuild("钢管塔(耐张)", "钢管塔(耐张)", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/钢管塔(耐张).svg", bounds: bounds });
-    registerTowerXBuild("钢管塔(直线)", "钢管塔(直线)", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/钢管塔(直线).svg", bounds: bounds });
-    registerTowerXBuild("木塔", "木塔", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/木塔.svg", bounds: bounds });
-    registerTowerXBuild("其他杆塔", "其他杆塔", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/其他杆塔.svg", bounds: bounds });
-    registerTowerXBuild("水泥杆", "水泥杆", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/水泥杆.svg", bounds: bounds });
-    registerTowerXBuild("铁杆(直线)", "铁杆(直线)", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/铁杆(直线).svg", bounds: new pwg.rectangle(-20, -16, 40, 32) });
-    registerTowerXBuild("铁塔（同角钢塔，耐张）", "铁塔（同角钢塔，耐张）", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/铁塔（同角钢塔，耐张）.svg", bounds: bounds });
-    registerTowerXBuild("铁塔（同角钢塔，直线）", "铁塔（同角钢塔，直线）", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/铁塔（同角钢塔，直线）.svg", bounds: bounds });
+    registerTowerXBuild("钢管杆(耐张)", "钢管杆(耐张)", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/钢管杆(耐张).svg", bounds: bounds });
+    registerTowerXBuild("钢管杆(直线)", "钢管杆(直线)", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/钢管杆(直线).svg", bounds: bounds });
+    registerTowerXBuild("钢管塔(耐张)", "钢管塔(耐张)", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/钢管塔(耐张).svg", bounds: bounds });
+    registerTowerXBuild("钢管塔(直线)", "钢管塔(直线)", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/钢管塔(直线).svg", bounds: bounds });
+    registerTowerXBuild("木塔", "木塔", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/木塔.svg", bounds: bounds });
+    registerTowerXBuild("其他杆塔", "其他杆塔", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/其他杆塔.svg", bounds: bounds });
+    registerTowerXBuild("水泥杆", "水泥杆", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/水泥杆.svg", bounds: bounds });
+    registerTowerXBuild("铁杆(直线)", "铁杆(直线)", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/铁杆(直线).svg", bounds: new pwg.rectangle(-20, -16, 40, 32) });
+    registerTowerXBuild("铁塔（同角钢塔，耐张）", "铁塔（同角钢塔，耐张）", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/铁塔（同角钢塔，耐张）.svg", bounds: bounds });
+    registerTowerXBuild("铁塔（同角钢塔，直线）", "铁塔（同角钢塔，直线）", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/铁塔（同角钢塔，直线）.svg", bounds: bounds });
 
     pwg.graphics.registerBuild("杆塔线路组", new TowerAlineGroupBuild("线路(地上)"));
     Tower.defaultBuild = pwg.graphics.getBuild("钢管杆(耐张)");
@@ -11276,7 +11282,7 @@ pwg.tower = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 /*
     pwg-device-common.js
@@ -11858,7 +11864,7 @@ pwg.device = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 /*
     pwg-canvas-render-engine.js
@@ -11877,9 +11883,9 @@ pwg.uicontext = function () {
         this._creatingBuild = null;
         this._container = null;
         this.tools = {
-            "creating":     new pwg.DefaultCreatingTool(),
-            "editing":      new pwg.DefaultEditingTool(),
-            "info":         new pwg.DefaultInfoTool()
+            "creating": new pwg.DefaultCreatingTool(),
+            "editing": new pwg.DefaultEditingTool(),
+            "info": new pwg.DefaultInfoTool()
         };
         this.defaultTool = this.tools.editing;
     }
@@ -11916,13 +11922,11 @@ pwg.uicontext = function () {
         get: function () {
             return this._container ? this._container : this.layer.scene;
         },
-        set:function(cc)
-        {
-            if(this._container!=cc)
-            {
+        set: function (cc) {
+            if (this._container != cc) {
                 var last = this._container;
                 this._container = cc;
-                this.raiseEvent("containerChanged",{last:last,current:cc});
+                this.raiseEvent("containerChanged", { last: last, current: cc });
             }
         }
     });
@@ -12059,7 +12063,7 @@ pwg.uicontext = function () {
     UiTool.prototype.start = function (context) {
         this._context = context;
     };
-    UiTool.prototype.stop = function (context) {};
+    UiTool.prototype.stop = function (context) { };
     UiTool.prototype.onmouseup = function (e) {
         return false;
     };
@@ -12078,7 +12082,7 @@ pwg.uicontext = function () {
     UiTool.prototype.tryGetUiCommand = function (e) {
         return null;
     };
-    UiTool.prototype.render = function (context) {};
+    UiTool.prototype.render = function (context) { };
     /////////////////////////////////////////////////////////////
     function tryGetLocation(scene, e, ignores, mode, filter, hitter) {
         if (hitter)
@@ -12129,6 +12133,16 @@ pwg.uicontext = function () {
             }
         }
     }
+
+    // 在这里写上传事件
+        DefaultCreatingTool.prototype.onLoadGeojson = function (geojson) {
+        var build = this.context.creatingBuild; // 在build中撰写LoadGeojson方法
+        if (build) {
+            build.loadGeojson(geojson);
+        }
+
+    }
+
     DefaultCreatingTool.prototype.onmouseup = function (e) {
         if (this.context.creatingBuild) {
             var build = this.context.creatingBuild;
@@ -12189,6 +12203,7 @@ pwg.uicontext = function () {
         if (this.context.creatingBuild) {
             var drawing = rc.drawing;
             this.context.creatingBuild.render(rc);
+
             if (this._last_e && this._last_e.location && this._last_e.location.pixel) {
                 var size = pwg.UI_HITTEST_TOLERENCE;
                 drawing.begin();
@@ -12300,10 +12315,9 @@ pwg.uicontext = function () {
             var code = "";
             if (e.button == pwg.MOUSE_BUTTON_LEFT) {
                 if (pwg.defined(handle.locationMode)) {
-                    
+
                     var location = tryGetLocation(this.context.container, e, [this.context.activeObject], handle.locationMode, _filter_, this);
-                    if(!location && this.context.container!=this.context.scene)
-                    {
+                    if (!location && this.context.container != this.context.scene) {
                         location = tryGetLocation(this.context.scene, e, [this.context.activeObject], handle.locationMode, _filter_, this);
                     }
                     e.location = location;
@@ -12316,7 +12330,7 @@ pwg.uicontext = function () {
                 this.activeHandle = null;
             }
 
-            this.context.scene.__runtime_bounding_box=null;
+            this.context.scene.__runtime_bounding_box = null;
             return true;
         } else
             return false;
@@ -12334,7 +12348,7 @@ pwg.uicontext = function () {
                     e.location = tryGetLocation(this.context.scene, e, [this.context.activeObject], mode, make_handle_filter(handle), this);
                 }
             }
-            this.context.scene.__runtime_bounding_box=null;
+            this.context.scene.__runtime_bounding_box = null;
             this._last_e = e;
             return true;
         } else
@@ -12400,7 +12414,7 @@ pwg.uicontext = function () {
                 this.hitted.render(drawing, "hot");
             }
         }
-        
+
     };
     pwg.DefaultEditingTool = DefaultEditingTool;
 
@@ -12434,8 +12448,7 @@ pwg.uicontext = function () {
         if (hit && hit.succeed) {
             activeObject = hit.object;
         }
-        if(this.context.activeObject != activeObject)
-        {
+        if (this.context.activeObject != activeObject) {
             this.context.activeObject = activeObject;
             return true;
         }
@@ -12456,11 +12469,11 @@ pwg.uicontext = function () {
         }
         if (activeObject != this._hottedObject) {
             if (this._hottedObject) {
-                this.context.raiseEvent("ui.mouseLeave", {e:e,object:this._hottedObject});
+                this.context.raiseEvent("ui.mouseLeave", { e: e, object: this._hottedObject });
             }
             this._hottedObject = activeObject;
             if (activeObject) {
-                this.context.raiseEvent("ui.mouseOver", {e:e,object:this._hottedObject});
+                this.context.raiseEvent("ui.mouseOver", { e: e, object: this._hottedObject });
             }
             return true;
         }
@@ -12493,12 +12506,11 @@ pwg.uicontext = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 /*
     pwg-module-inline.js
 */
-
 if(typeof pwg =='undefined')
     pwg={};
 pwg.initialize=function(_paper)
@@ -12527,7 +12539,7 @@ pwg.initialize=function(_paper)
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 if (typeof pwg === 'undefined')
     pwg = {};
@@ -12748,7 +12760,7 @@ pwg.ol = function (ol) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -12991,8 +13003,6 @@ pwg.mapbox = function (mapbox) {
         canvasContainer.appendChild(canvas);
         this.canvas = canvas;
 
-        console.log(canvasContainer)
-
         this.context = new GraphicsMapboxContext();
         this.context.t = this.map.transform;
         this.context.drawing = new pwg.ContextDrawing2D();
@@ -13168,7 +13178,7 @@ pwg.mapbox = function (mapbox) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2024-11-20 13:06:56.207327
+编译时间:2025-07-07 22:20:18.736720
 */
 pwg = pwg || {};
 pwg.jxt = function () {
@@ -13474,6 +13484,5 @@ pwg.jxt = function () {
     pwg.JxtCanvas = JxtCanvas;
 };
 
+
 export default pwg
-
-
