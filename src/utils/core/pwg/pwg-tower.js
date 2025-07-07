@@ -36,13 +36,13 @@ pwg.tower = function () {
         this._interval0 = bounds.width / 2.0;
         this._jointA = new pwg.AbsoluteLocation(this, "joint-A", "pixel");
         this._jointA.joint = new pwg.Joint("point");
-        this._jointA._counter=0;
+        this._jointA._counter = 0;
         this._jointB = new pwg.AbsoluteLocation(this, "joint-B", "pixel");
         this._jointB.joint = new pwg.Joint("point");
-        this._jointB._counter=0;
+        this._jointB._counter = 0;
         this._jointC = new pwg.AbsoluteLocation(this, "joint-C", "pixel");
         this._jointC.joint = new pwg.Joint("point");
-        this._jointC._counter=0;
+        this._jointC._counter = 0;
 
         this._joints = [this._jointA, this._jointC, this._jointB];
         this.groupAdjustRatio = 1.0;
@@ -59,12 +59,11 @@ pwg.tower = function () {
             this.offset.s = 1.0;
             interval *= this.groupAdjustRatio;
         }
-        pwg.PointGraphics.prototype.update.call(this,all);
+        pwg.PointGraphics.prototype.update.call(this, all);
         var x = -interval;
         for (var i = 0; i < 3; i++) {
             var joint = this._joints[i];
-            if(all||joint._use_counter>0)
-            {
+            if (all || joint._use_counter > 0) {
                 joint.point = this.baseToPixel(new pwg.point(x, 0));
                 joint.angle = this.offset.angle;
                 joint.update();
@@ -72,17 +71,14 @@ pwg.tower = function () {
             x += interval;
         }
     };
-    Tower.prototype.updateForceJoint=function()
-    {
+    Tower.prototype.updateForceJoint = function () {
         this.update(true);
     };
-    Tower.prototype._use_location=function(loc)
-    {
+    Tower.prototype._use_location = function (loc) {
         loc._counter++;
     };
 
-    Tower.prototype._release_location=function(loc)
-    {
+    Tower.prototype._release_location = function (loc) {
         loc._counter--;
     };
 
@@ -93,16 +89,15 @@ pwg.tower = function () {
     Tower.prototype._get_handles = function () {
         var handles = this._handles;
         if (this.owner && this.owner.classid == TowerAlineGroup.classid) {
-            return [handles[0],this._annotation._handles[1]];
-        } else 
-        {
+            return [handles[0], this._annotation._handles[1]];
+        } else {
             return [this._annotation._handles[1]].concat(handles);
         }
     };
 
     Tower.prototype.hitTest = function (e, option) {
-        if(!this._visibility)
-            return ;
+        if (!this._visibility)
+            return;
         var hit = this._icon.hitTest(e.pixel, pwg.drawing.default_paper_param);
         if (hit) {
             return {
@@ -116,9 +111,9 @@ pwg.tower = function () {
     };
 
     Tower.prototype.render = function (drawing, pass) {
-        if(!this._visibility)
-            return ;
-        this._annotation.render(drawing,pass);
+        if (!this._visibility)
+            return;
+        this._annotation.render(drawing, pass);
         if (pass == "entity") {
             drawing.begin();
             var param = drawing.default_paper_param;
@@ -212,6 +207,11 @@ pwg.tower = function () {
     TowerXBuild.prototype.getLocationMode = function () {
         return this._options.locationMode;
     };
+
+    TowerXBuild.prototype.addFromData = function (e) {
+        this._context.container.addChild(this.create(this._context.container, e));
+    }
+
     TowerXBuild.prototype.update = function (e, action) {
         if (action == "down") {
             if (!this._creating) {
@@ -286,7 +286,7 @@ pwg.tower = function () {
         this._handle_move_insert = new pwg.UiHandle(this, "handle.move", "", "simple");
         this._handle_move_insert.locationMode = "joint";
         this._handles = [this._add_head_handle, this._add_tail_handle];
-        this._hash_locations=new pwg.point();
+        this._hash_locations = new pwg.point();
     }
     pwg.inherits(TowerAlineGroup, pwg.Group);
     pwg.defineClassId(TowerAlineGroup, "pwg.TowerAlineGroup");
@@ -309,8 +309,8 @@ pwg.tower = function () {
     };
 
     TowerAlineGroup.prototype.removeChild = function (o) {
-        
-        var b = pwg.Group.prototype.removeChild.call(this,o);
+
+        var b = pwg.Group.prototype.removeChild.call(this, o);
         var ix;
         if ((ix = this._towers.indexOf(o)) != -1) {
             this._towers.splice(ix, 1);
@@ -318,10 +318,10 @@ pwg.tower = function () {
         return b;
     };
 
-    TowerAlineGroup.prototype.makeInlineRoute = function (nloc,routeType) {
+    TowerAlineGroup.prototype.makeInlineRoute = function (nloc, routeType) {
         var towers = this._towers;
         //var route =  this.container.createGraphics(pwg.Route.classid);
-        var route = pwg.graphics.getBuild(routeType).create(this.container,[]);
+        var route = pwg.graphics.getBuild(routeType).create(this.container, []);
         for (var i = 0, l = towers.length; i < l; i++) {
             var tower = towers[i];
             route.add(tower.getLocation(nloc));
@@ -329,8 +329,7 @@ pwg.tower = function () {
         this.addChild(route);
     };
 
-    function make_hash_locations(towers)
-    {
+    function make_hash_locations(towers) {
         var loc = new pwg.point();
         if (towers.length < 2)
             return loc;
@@ -338,8 +337,8 @@ pwg.tower = function () {
         for (var i = 0, n = towers.length; i < n; i++) {
             var tw = towers[i];
             var p = tw.location.lonlat;
-            loc.x+=p.x;
-            loc.y+=p.y;
+            loc.x += p.x;
+            loc.y += p.y;
         }
         return loc;
     }
@@ -401,17 +400,15 @@ pwg.tower = function () {
         var towers = this._towers;
         //此处代码包含了避免重新计算角度的逻辑。
         var last_hash_location = make_hash_locations(towers);
-        if(!this._hash_locations.equals(last_hash_location)||all)
-        {
+        if (!this._hash_locations.equals(last_hash_location) || all) {
             for (var i = 0, l = towers.length; i < l; i++) {
                 towers[i].updateOnlyLocation();
             }
             this._outline = calc_aline_direction_adjust_ratio(this._towers);
 
-            this._hash_locations=last_hash_location;
+            this._hash_locations = last_hash_location;
         }
-        else
-        {
+        else {
             this._outline = make_towers_only_pline(this._towers);
         }
 
@@ -510,40 +507,33 @@ pwg.tower = function () {
         }
     };
 
-    TowerAlineGroup.prototype.depth=function()
-    {
+    TowerAlineGroup.prototype.depth = function () {
         var towers = this._towers;
         var d = 0;
-        for(var i=0,l=towers.length;i<l;i++)
-        {
+        for (var i = 0, l = towers.length; i < l; i++) {
             var t = towers[i];
-            d=Math.max(t.depth(),d);
+            d = Math.max(t.depth(), d);
         }
-        return d+1;
+        return d + 1;
     };
 
-    TowerAlineGroup.prototype.isDep=function(o)
-    {
+    TowerAlineGroup.prototype.isDep = function (o) {
         var towers = this._towers;
         var d = 0;
-        for(var i=0,l=towers.length;i<l;i++)
-        {
+        for (var i = 0, l = towers.length; i < l; i++) {
             var t = towers[i];
-            if(t==o||t.isDep(o))
-            return true;
+            if (t == o || t.isDep(o))
+                return true;
         }
         return false;
     };
 
-    TowerAlineGroup.prototype.removeDep=function(o)
-    {
+    TowerAlineGroup.prototype.removeDep = function (o) {
         var towers = this._towers;
         var d = 0;
-        for(var i=0,l=tower.length;i<l;i++)
-        {
+        for (var i = 0, l = tower.length; i < l; i++) {
             var t = towers[i];
-            if(t==o)
-            {
+            if (t == o) {
                 this.removeChild(o);
                 return true;
             }
@@ -557,7 +547,7 @@ pwg.tower = function () {
             drawing.resetTransform();
             drawing.drawEx(this._outline, pwg.styles.get("tower-aline-group.default"));
             drawing.end();
-        } else if (pass == "ui"||pass=="hot"||pass=="debug") {
+        } else if (pass == "ui" || pass == "hot" || pass == "debug") {
             drawing.begin();
             drawing.resetTransform();
             var outline = this._outline;
@@ -583,8 +573,7 @@ pwg.tower = function () {
             }
             drawing.end();
         }
-        if( pass!="ui"&& pass!="hot")
-        {
+        if (pass != "ui" && pass != "hot") {
             pwg.Group.prototype.render.call(this, drawing, pass);
         }
     };
@@ -680,9 +669,9 @@ pwg.tower = function () {
 
     TowerAlineGroupBuild.prototype.post = function (e, action) {
         if (this._creating) {
-            this._creating.makeInlineRoute("joint-A",this.routeType);
-            this._creating.makeInlineRoute("joint-B",this.routeType);
-            this._creating.makeInlineRoute("joint-C",this.routeType);
+            this._creating.makeInlineRoute("joint-A", this.routeType);
+            this._creating.makeInlineRoute("joint-B", this.routeType);
+            this._creating.makeInlineRoute("joint-C", this.routeType);
             this._context.container.addChild(this._creating);
         }
         this._creating = null;
@@ -711,16 +700,16 @@ pwg.tower = function () {
     };
     //////////////////////////////////////////////////////////
     var bounds = new pwg.rectangle(-16, -16, 32, 32);
-    registerTowerXBuild("钢管杆(耐张)", "钢管杆(耐张)", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/钢管杆(耐张).svg", bounds: bounds });
-    registerTowerXBuild("钢管杆(直线)", "钢管杆(直线)", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/钢管杆(直线).svg", bounds: bounds });
-    registerTowerXBuild("钢管塔(耐张)", "钢管塔(耐张)", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/钢管塔(耐张).svg", bounds: bounds });
-    registerTowerXBuild("钢管塔(直线)", "钢管塔(直线)", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/钢管塔(直线).svg", bounds: bounds });
-    registerTowerXBuild("木塔", "木塔", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/木塔.svg", bounds: bounds });
-    registerTowerXBuild("其他杆塔", "其他杆塔", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/其他杆塔.svg", bounds: bounds });
-    registerTowerXBuild("水泥杆", "水泥杆", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/水泥杆.svg", bounds: bounds });
-    registerTowerXBuild("铁杆(直线)", "铁杆(直线)", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/铁杆(直线).svg", bounds: new pwg.rectangle(-20, -16, 40, 32) });
-    registerTowerXBuild("铁塔（同角钢塔，耐张）", "铁塔（同角钢塔，耐张）", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/铁塔（同角钢塔，耐张）.svg", bounds: bounds });
-    registerTowerXBuild("铁塔（同角钢塔，直线）", "铁塔（同角钢塔，直线）", { icon: pwg.ROOT_PATH+"/pwg/svg/标准/铁塔（同角钢塔，直线）.svg", bounds: bounds });
+    registerTowerXBuild("钢管杆(耐张)", "钢管杆(耐张)", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/钢管杆(耐张).svg", bounds: bounds });
+    registerTowerXBuild("钢管杆(直线)", "钢管杆(直线)", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/钢管杆(直线).svg", bounds: bounds });
+    registerTowerXBuild("钢管塔(耐张)", "钢管塔(耐张)", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/钢管塔(耐张).svg", bounds: bounds });
+    registerTowerXBuild("钢管塔(直线)", "钢管塔(直线)", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/钢管塔(直线).svg", bounds: bounds });
+    registerTowerXBuild("木塔", "木塔", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/木塔.svg", bounds: bounds });
+    registerTowerXBuild("其他杆塔", "其他杆塔", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/其他杆塔.svg", bounds: bounds });
+    registerTowerXBuild("水泥杆", "水泥杆", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/水泥杆.svg", bounds: bounds });
+    registerTowerXBuild("铁杆(直线)", "铁杆(直线)", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/铁杆(直线).svg", bounds: new pwg.rectangle(-20, -16, 40, 32) });
+    registerTowerXBuild("铁塔（同角钢塔，耐张）", "铁塔（同角钢塔，耐张）", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/铁塔（同角钢塔，耐张）.svg", bounds: bounds });
+    registerTowerXBuild("铁塔（同角钢塔，直线）", "铁塔（同角钢塔，直线）", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/铁塔（同角钢塔，直线）.svg", bounds: bounds });
 
     pwg.graphics.registerBuild("杆塔线路组", new TowerAlineGroupBuild("线路(地上)"));
     Tower.defaultBuild = pwg.graphics.getBuild("钢管杆(耐张)");

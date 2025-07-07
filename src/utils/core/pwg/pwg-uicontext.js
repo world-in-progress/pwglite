@@ -15,9 +15,9 @@ pwg.uicontext = function () {
         this._creatingBuild = null;
         this._container = null;
         this.tools = {
-            "creating":     new pwg.DefaultCreatingTool(),
-            "editing":      new pwg.DefaultEditingTool(),
-            "info":         new pwg.DefaultInfoTool()
+            "creating": new pwg.DefaultCreatingTool(),
+            "editing": new pwg.DefaultEditingTool(),
+            "info": new pwg.DefaultInfoTool()
         };
         this.defaultTool = this.tools.editing;
     }
@@ -54,13 +54,11 @@ pwg.uicontext = function () {
         get: function () {
             return this._container ? this._container : this.layer.scene;
         },
-        set:function(cc)
-        {
-            if(this._container!=cc)
-            {
+        set: function (cc) {
+            if (this._container != cc) {
                 var last = this._container;
                 this._container = cc;
-                this.raiseEvent("containerChanged",{last:last,current:cc});
+                this.raiseEvent("containerChanged", { last: last, current: cc });
             }
         }
     });
@@ -197,7 +195,7 @@ pwg.uicontext = function () {
     UiTool.prototype.start = function (context) {
         this._context = context;
     };
-    UiTool.prototype.stop = function (context) {};
+    UiTool.prototype.stop = function (context) { };
     UiTool.prototype.onmouseup = function (e) {
         return false;
     };
@@ -216,7 +214,7 @@ pwg.uicontext = function () {
     UiTool.prototype.tryGetUiCommand = function (e) {
         return null;
     };
-    UiTool.prototype.render = function (context) {};
+    UiTool.prototype.render = function (context) { };
     /////////////////////////////////////////////////////////////
     function tryGetLocation(scene, e, ignores, mode, filter, hitter) {
         if (hitter)
@@ -267,6 +265,16 @@ pwg.uicontext = function () {
             }
         }
     }
+
+    // 在这里写上传事件
+        DefaultCreatingTool.prototype.onLoadGeojson = function (geojson) {
+        var build = this.context.creatingBuild; // 在build中撰写LoadGeojson方法
+        if (build) {
+            build.loadGeojson(geojson);
+        }
+
+    }
+
     DefaultCreatingTool.prototype.onmouseup = function (e) {
         if (this.context.creatingBuild) {
             var build = this.context.creatingBuild;
@@ -327,7 +335,7 @@ pwg.uicontext = function () {
         if (this.context.creatingBuild) {
             var drawing = rc.drawing;
             this.context.creatingBuild.render(rc);
-            
+
             if (this._last_e && this._last_e.location && this._last_e.location.pixel) {
                 var size = pwg.UI_HITTEST_TOLERENCE;
                 drawing.begin();
@@ -439,10 +447,9 @@ pwg.uicontext = function () {
             var code = "";
             if (e.button == pwg.MOUSE_BUTTON_LEFT) {
                 if (pwg.defined(handle.locationMode)) {
-                    
+
                     var location = tryGetLocation(this.context.container, e, [this.context.activeObject], handle.locationMode, _filter_, this);
-                    if(!location && this.context.container!=this.context.scene)
-                    {
+                    if (!location && this.context.container != this.context.scene) {
                         location = tryGetLocation(this.context.scene, e, [this.context.activeObject], handle.locationMode, _filter_, this);
                     }
                     e.location = location;
@@ -455,7 +462,7 @@ pwg.uicontext = function () {
                 this.activeHandle = null;
             }
 
-            this.context.scene.__runtime_bounding_box=null;
+            this.context.scene.__runtime_bounding_box = null;
             return true;
         } else
             return false;
@@ -473,7 +480,7 @@ pwg.uicontext = function () {
                     e.location = tryGetLocation(this.context.scene, e, [this.context.activeObject], mode, make_handle_filter(handle), this);
                 }
             }
-            this.context.scene.__runtime_bounding_box=null;
+            this.context.scene.__runtime_bounding_box = null;
             this._last_e = e;
             return true;
         } else
@@ -539,7 +546,7 @@ pwg.uicontext = function () {
                 this.hitted.render(drawing, "hot");
             }
         }
-        
+
     };
     pwg.DefaultEditingTool = DefaultEditingTool;
 
@@ -573,8 +580,7 @@ pwg.uicontext = function () {
         if (hit && hit.succeed) {
             activeObject = hit.object;
         }
-        if(this.context.activeObject != activeObject)
-        {
+        if (this.context.activeObject != activeObject) {
             this.context.activeObject = activeObject;
             return true;
         }
@@ -595,11 +601,11 @@ pwg.uicontext = function () {
         }
         if (activeObject != this._hottedObject) {
             if (this._hottedObject) {
-                this.context.raiseEvent("ui.mouseLeave", {e:e,object:this._hottedObject});
+                this.context.raiseEvent("ui.mouseLeave", { e: e, object: this._hottedObject });
             }
             this._hottedObject = activeObject;
             if (activeObject) {
-                this.context.raiseEvent("ui.mouseOver", {e:e,object:this._hottedObject});
+                this.context.raiseEvent("ui.mouseOver", { e: e, object: this._hottedObject });
             }
             return true;
         }
