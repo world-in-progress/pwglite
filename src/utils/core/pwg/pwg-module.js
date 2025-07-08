@@ -1,7 +1,7 @@
 let pwg;let paper;
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 /*
     pwg-base.js
@@ -188,7 +188,7 @@ pwg.base = function (paper) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 /*
     pwg-math.js
@@ -999,7 +999,7 @@ pwg.math = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 /*
     pwg-utils.js
@@ -1893,7 +1893,7 @@ pwg.utils = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 /*
     pwg-canvas-render-engine.js
@@ -3023,7 +3023,7 @@ pwg.drawing = function (paper) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 if (typeof pwg == "undefined")
     pwg = {}
@@ -3138,7 +3138,7 @@ pwg.styles = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 if(typeof pwg=="undefined")
 pwg={};
@@ -3256,7 +3256,7 @@ pwg.json=function(){
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -3639,7 +3639,7 @@ pwg.location = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 if (typeof pwg == 'undefined')
     pwg = {};
@@ -4366,7 +4366,7 @@ pwg.graphics.base = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -4711,7 +4711,7 @@ pwg.graphics.frame = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 /*
     pwg-scene.js
@@ -5036,7 +5036,7 @@ pwg.graphics.scene = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -6059,7 +6059,7 @@ if (!pwg.cad) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 /*
     pwg-route.js
@@ -7268,7 +7268,7 @@ pwg.route = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 /*
     pwg-xpath.js
@@ -7476,7 +7476,7 @@ pwg.xpath = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 /*
     pwg-xlabel.js
@@ -8505,7 +8505,7 @@ pwg.xlabel = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 //import { Bezier } from "bezier-js/dist/bezier.js"
 if (typeof pwg == 'undefined')
@@ -10560,7 +10560,7 @@ pwg.tube = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -11282,7 +11282,7 @@ pwg.tower = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 /*
     pwg-device-common.js
@@ -11864,7 +11864,7 @@ pwg.device = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 /*
     pwg-canvas-render-engine.js
@@ -12135,7 +12135,7 @@ pwg.uicontext = function () {
     }
 
     // 在这里写上传事件
-        DefaultCreatingTool.prototype.onLoadGeojson = function (geojson) {
+    DefaultCreatingTool.prototype.onLoadGeojson = function (geojson) {
         var build = this.context.creatingBuild; // 在build中撰写LoadGeojson方法
         if (build) {
             build.loadGeojson(geojson);
@@ -12506,7 +12506,7 @@ pwg.uicontext = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 /*
     pwg-module-inline.js
@@ -12539,7 +12539,7 @@ pwg.initialize=function(_paper)
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 if (typeof pwg === 'undefined')
     pwg = {};
@@ -12760,7 +12760,7 @@ pwg.ol = function (ol) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -13172,13 +13172,39 @@ pwg.mapbox = function (mapbox) {
             this.canvas.style.cursor = 'default';
         }
     };
+
+    CanvasOverLayer.prototype.loadGeojson = function (geojson) {
+        // 只允许上传指定格式的geojson
+        // {
+        //   "type": "Feature",
+        //   "properties": {},
+        //   "geometry": {
+        //     "coordinates": [经度, 纬度],
+        //     "type": "Point"
+        //   }
+        // }
+        let coords = null;
+        if (
+            geojson &&
+            geojson.type === 'Feature' &&
+            geojson.geometry &&
+            geojson.geometry.type === 'Point' &&
+            Array.isArray(geojson.geometry.coordinates)
+        ) {
+            coords = geojson.geometry.coordinates;
+            console.log(coords)
+        } else {
+            console.warn('请上传合法geojson!')
+        }
+    }
+
     pwg.mapbox.Layer = CanvasOverLayer;
 };
 
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-07 22:20:18.736720
+编译时间:2025-07-08 10:28:21.448831
 */
 pwg = pwg || {};
 pwg.jxt = function () {

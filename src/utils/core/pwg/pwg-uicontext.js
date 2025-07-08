@@ -267,7 +267,7 @@ pwg.uicontext = function () {
     }
 
     // 在这里写上传事件
-        DefaultCreatingTool.prototype.onLoadGeojson = function (geojson) {
+    DefaultCreatingTool.prototype.onLoadGeojson = function (geojson) {
         var build = this.context.creatingBuild; // 在build中撰写LoadGeojson方法
         if (build) {
             build.loadGeojson(geojson);
