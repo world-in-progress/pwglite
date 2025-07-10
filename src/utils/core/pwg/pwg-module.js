@@ -1,7 +1,7 @@
 let pwg;let paper;
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 /*
     pwg-base.js
@@ -188,7 +188,7 @@ pwg.base = function (paper) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 /*
     pwg-math.js
@@ -999,7 +999,7 @@ pwg.math = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 /*
     pwg-utils.js
@@ -1893,7 +1893,7 @@ pwg.utils = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 /*
     pwg-canvas-render-engine.js
@@ -3023,7 +3023,7 @@ pwg.drawing = function (paper) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 if (typeof pwg == "undefined")
     pwg = {}
@@ -3138,7 +3138,7 @@ pwg.styles = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 if(typeof pwg=="undefined")
 pwg={};
@@ -3256,7 +3256,7 @@ pwg.json=function(){
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -3639,7 +3639,7 @@ pwg.location = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 if (typeof pwg == 'undefined')
     pwg = {};
@@ -4368,7 +4368,7 @@ pwg.graphics.base = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -4713,7 +4713,7 @@ pwg.graphics.frame = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 /*
     pwg-scene.js
@@ -5038,7 +5038,7 @@ pwg.graphics.scene = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -6061,7 +6061,7 @@ if (!pwg.cad) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 /*
     pwg-route.js
@@ -7270,7 +7270,7 @@ pwg.route = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 /*
     pwg-xpath.js
@@ -7478,7 +7478,7 @@ pwg.xpath = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 /*
     pwg-xlabel.js
@@ -8507,7 +8507,7 @@ pwg.xlabel = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 //import { Bezier } from "bezier-js/dist/bezier.js"
 if (typeof pwg == 'undefined')
@@ -10562,7 +10562,7 @@ pwg.tube = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -11305,7 +11305,7 @@ pwg.tower = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 /*
     pwg-device-common.js
@@ -11887,7 +11887,7 @@ pwg.device = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 /*
     pwg-canvas-render-engine.js
@@ -12529,7 +12529,7 @@ pwg.uicontext = function () {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 /*
     pwg-module-inline.js
@@ -12562,7 +12562,7 @@ pwg.initialize=function(_paper)
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 if (typeof pwg === 'undefined')
     pwg = {};
@@ -12783,7 +12783,7 @@ pwg.ol = function (ol) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 if (typeof pwg == "undefined")
     pwg = {};
@@ -13202,7 +13202,7 @@ pwg.mapbox = function (mapbox) {
 
 /*
 pwg graphics lib wenyongning@njnu.edu.cn
-编译时间:2025-07-10 15:18:54.430703
+编译时间:2025-07-10 16:11:24.785728
 */
 pwg = pwg || {};
 pwg.jxt = function () {
