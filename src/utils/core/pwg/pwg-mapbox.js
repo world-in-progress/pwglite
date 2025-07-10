@@ -409,30 +409,5 @@ pwg.mapbox = function (mapbox) {
         }
     };
 
-    CanvasOverLayer.prototype.loadGeojson = function (geojson) {
-        // 只允许上传指定格式的geojson
-        // {
-        //   "type": "Feature",
-        //   "properties": {},
-        //   "geometry": {
-        //     "coordinates": [经度, 纬度],
-        //     "type": "Point"
-        //   }
-        // }
-        let coords = null;
-        if (
-            geojson &&
-            geojson.type === 'Feature' &&
-            geojson.geometry &&
-            geojson.geometry.type === 'Point' &&
-            Array.isArray(geojson.geometry.coordinates)
-        ) {
-            coords = geojson.geometry.coordinates;
-            console.log(coords)
-        } else {
-            console.warn('请上传合法geojson!')
-        }
-    }
-
     pwg.mapbox.Layer = CanvasOverLayer;
 };

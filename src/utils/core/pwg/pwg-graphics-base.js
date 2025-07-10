@@ -639,6 +639,8 @@ pwg.graphics.base = function () {
         var v2 = owner.pixelToFrame(e.pixel);
         var dangle = v2.getDirectedAngle(v1);
         owner._offset_location.offset.r = -dangle;
+        console.log(owner._offset_location.offset.r)
+
     }
     pwg.utils._do_point_graphics_handle_rotate_update_e = _do_point_graphics_handle_rotate_update_e;
 

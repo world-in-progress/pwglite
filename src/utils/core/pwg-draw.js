@@ -82,12 +82,13 @@ export default class PWGDraw {
 
   getAllBuilds() {
     return this._builds.map((build) => {
-      return { name: build.constructor.name, label: build.title };
+      return { name: build.title, class: build.constructor.name  };
     });
   }
 
   _activateBuild(name) {
-    const build = this._builds.find((item) => item.constructor.name === name);
+    console.log(this._builds)
+    const build = this._builds.find((item) => item.title === name);
     let uicontext = this._uicontext;
     uicontext.creatingBuild = build;
     this._setUiTool("creating");
@@ -160,6 +161,52 @@ export default class PWGDraw {
     if (mode === "none") {
       this._setUiTool("info");
       this._overLayer.render();
+    }
+  }
+
+  loadGeojson(geojson) {
+    if (!geojson) return;
+    if (
+      geojson.type === "FeatureCollection" &&
+      Array.isArray(geojson.features)
+    ) {
+      geojson.features.forEach((feature) => {
+        this._loadSingleFeature(feature);
+      });
+    } else if (geojson.type === "Feature") {
+      this._loadSingleFeature(geojson);
+    } else {
+      console.warn("请上传合法geojson!");
+    }
+  }
+
+  _loadSingleFeature(feature) {
+    if (
+      feature &&
+      feature.type === "Feature" &&
+      feature.geometry &&
+      feature.geometry.type === "Point" &&
+      Array.isArray(feature.geometry.coordinates)
+    ) {
+      const [lon, lat] = feature.geometry.coordinates;
+      var lnglat = new pwg.lonlat(lon, lat);
+      var global = this._overLayer.context.lonlatToGlobal(lnglat);
+      var pixel = this._overLayer.context.globalToPixel(lnglat);
+
+      this._activateBuild("钢管塔(耐张)");
+      console.log(this._uicontext.creatingBuild);
+      if (!this._uicontext.creatingBuild) {
+        console.error("没有相应的图形!");
+      }
+      this._uicontext.creatingBuild.addFromData({
+        lnglat,
+        global,
+        pixel,
+        scale: feature.properties.scale,
+        rotation: feature.properties.rotation,
+      });
+    } else {
+      console.warn("请上传合法的Point类型Feature!");
     }
   }
 }

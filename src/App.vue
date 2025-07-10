@@ -7,7 +7,7 @@ mapboxgl.accessToken =
   "pk.eyJ1IjoiZmxpY2tlcjA1NiIsImEiOiJjbGd4OXM1c3cwOWs3M21ta2RiMDhoczVnIn0.lE8NriBf_g3RZWCusw_mZA";
 
 const mapContainer = ref(null);
-const builds = ref<{ name: string; label: string }[]>([]);
+const builds = ref<{ name: string; class: string }[]>([]);
 const features = ref<{ id: string; type: string }[]>([]);
 
 const highlightedFeatureId = ref<string | null>(null);
@@ -60,6 +60,23 @@ const updateFeaturesList = () => {
   }
 };
 
+const handleGeoJsonUpload = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      // try {
+        const geojson = JSON.parse(e.target?.result as string);
+        pwg?.loadGeojson(geojson)
+      // } catch (err) {
+      //   alert("文件内容不是有效的GeoJSON");
+      // }
+    };
+    reader.readAsText(file);
+  }
+};
+
 onMounted(() => {
   const map = new mapboxgl.Map({
     container: "container",
@@ -106,13 +123,19 @@ onMounted(() => {
   <div id="app">
     <div id="sidebar">
       <div class="sidebar-header">对象列表</div>
+      <div style="margin-bottom: 10px;">
+        <label for="geojson-upload" class="feature-action-btn" style="cursor:pointer;">
+          📁 上传GeoJSON
+        </label>
+        <input id="geojson-upload" type="file" accept=".geojson,application/json" style="display:none" @change="handleGeoJsonUpload" />
+      </div>
       <select id="h_create_calss_list" multiple @change="onCreateClassChanged">
         <option
           v-for="(build, index) in builds"
           :key="index"
           :value="build.name"
         >
-          {{ build.label }}
+          {{ build.name }}
         </option>
       </select>
 

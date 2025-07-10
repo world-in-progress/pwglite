@@ -172,6 +172,24 @@ pwg.tower = function () {
         return null;
     };
 
+    Tower.prototype.setScale = function(s) {
+        let scale = Number(s);
+        if (isNaN(scale) || scale <= 0) {
+            scale = 1
+        }
+        this._offset_location.offset.s = scale
+    }
+
+    Tower.prototype.setRotation = function(r) {
+        let rotation = Number(r);
+        if (isNaN(rotation)) {
+            rotation = 0;
+        }
+        // 规范到-180~180
+        rotation = ((rotation + 180) % 360 + 360) % 360 - 180;
+        this._offset_location.offset.r = rotation;
+    }
+
     Tower.prototype._execute_ui_command = function (command) {
         if (command.id == "remove-from-group") {
             var container = this.container;
@@ -209,7 +227,10 @@ pwg.tower = function () {
     };
 
     TowerXBuild.prototype.addFromData = function (e) {
-        this._context.container.addChild(this.create(this._context.container, e));
+        let creating = this.create(this._context.container, e)
+        this._context.container.addChild(creating);
+        creating.setScale(e.scale)
+        creating.setRotation(e.rotation)
     }
 
     TowerXBuild.prototype.update = function (e, action) {

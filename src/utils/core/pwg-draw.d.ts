@@ -16,7 +16,7 @@ export default class PWGDraw {
   /**
    * 获取所有构建项（构造器名称和显示名称）
    */
-  getAllBuilds(): { name: string; label: string }[];
+  getAllBuilds(): { name: string; class: string }[];
 
   /**
    * 获取所有图形要素
@@ -38,4 +38,6 @@ export default class PWGDraw {
    * 切换编辑模式
    */
   changeMode(mode: PWGMode, options?: object): void;
+
+  loadGeojson(geojson: object);
 }
