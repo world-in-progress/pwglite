@@ -24,4 +24,5 @@ pwg.initialize=function(_paper)
     pwg.xpath();
     pwg.xlabel();
     pwg.uicontext();
+    pwg.simplePoint();
 };

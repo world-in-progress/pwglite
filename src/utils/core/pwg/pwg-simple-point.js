@@ -33,69 +33,62 @@ pwg.simplePoint = function () {
             location: "joint"
         };
         pwg.super(this, pwg.PointGraphics, container, id, bounds, [pivot]);
-        this._interval0 = bounds.width / 2.0;
-        this._jointA = new pwg.AbsoluteLocation(this, "joint-A", "pixel");
-        this._jointA.joint = new pwg.Joint("point");
-        this._jointA._counter = 0;
-        this._jointB = new pwg.AbsoluteLocation(this, "joint-B", "pixel");
-        this._jointB.joint = new pwg.Joint("point");
-        this._jointB._counter = 0;
+        // 只保留中间的捕捉点（_jointC）
         this._jointC = new pwg.AbsoluteLocation(this, "joint-C", "pixel");
         this._jointC.joint = new pwg.Joint("point");
         this._jointC._counter = 0;
 
-        this._joints = [this._jointA, this._jointC, this._jointB];
+        // 将_joints数组只包含中间的捕捉点
+        this._joints = [this._jointC];
         this.groupAdjustRatio = 1.0;
         this.groupAlineAngle = 0.0;
         this._handles[0].locationMode = "joint";
     };
     //////////////////////////////////////////////////////////////////////////////
-    pwg.inherits(Tower, pwg.PointGraphics);
-    pwg.defineClassId(Tower, "pwg.Tower");
-    Tower.prototype.update = function (all) {
+    pwg.inherits(SimplePoint, pwg.PointGraphics);
+    pwg.defineClassId(SimplePoint, "pwg.SimplePoint");
+    SimplePoint.prototype.update = function (all) {
         var interval = this._interval0;
-        if (this.owner && this.owner.classid == TowerAlineGroup.classid) {
+        if (this.owner && this.owner.classid == SimplePointAlineGroup.classid) {
             this.offset.r = this.groupAlineAngle;
             this.offset.s = 1.0;
             interval *= this.groupAdjustRatio;
         }
         pwg.PointGraphics.prototype.update.call(this, all);
-        var x = -interval;
-        for (var i = 0; i < 3; i++) {
-            var joint = this._joints[i];
-            if (all || joint._use_counter > 0) {
-                joint.point = this.baseToPixel(new pwg.point(x, 0));
-                joint.angle = this.offset.angle;
-                joint.update();
-            }
-            x += interval;
+
+        // 只更新中间捕捉点//
+        var joint = this._jointC;
+        if (all || joint._use_counter > 0) {
+            joint.point = this.baseToPixel(new pwg.point(0, 0)); // 将点定位在中心
+            joint.angle = this.offset.angle;
+            joint.update();
         }
     };
-    Tower.prototype.updateForceJoint = function () {
+    SimplePoint.prototype.updateForceJoint = function () {
         this.update(true);
     };
-    Tower.prototype._use_location = function (loc) {
+    SimplePoint.prototype._use_location = function (loc) {
         loc._counter++;
     };
 
-    Tower.prototype._release_location = function (loc) {
+    SimplePoint.prototype._release_location = function (loc) {
         loc._counter--;
     };
 
-    Tower.prototype.updateOnlyLocation = function () {
+    SimplePoint.prototype.updateOnlyLocation = function () {
         pwg.PointGraphics.prototype.updateOnlyLocation.call(this);
     };
 
-    Tower.prototype._get_handles = function () {
+    SimplePoint.prototype._get_handles = function () {
         var handles = this._handles;
-        if (this.owner && this.owner.classid == TowerAlineGroup.classid) {
+        if (this.owner && this.owner.classid == SimplePointAlineGroup.classid) {
             return [handles[0], this._annotation._handles[1]];
         } else {
             return [this._annotation._handles[1]].concat(handles);
         }
     };
 
-    Tower.prototype.hitTest = function (e, option) {
+    SimplePoint.prototype.hitTest = function (e, option) {
         if (!this._visibility)
             return;
         var hit = this._icon.hitTest(e.pixel, pwg.drawing.default_paper_param);
@@ -110,7 +103,7 @@ pwg.simplePoint = function () {
         }
     };
 
-    Tower.prototype.render = function (drawing, pass) {
+    SimplePoint.prototype.render = function (drawing, pass) {
         if (!this._visibility)
             return;
         this._annotation.render(drawing, pass);
@@ -125,54 +118,46 @@ pwg.simplePoint = function () {
             this.updateForceJoint();
             drawing.begin();
             drawing.resetTransform();
-            var joints = this._joints;
-            for (var i = 0; i < 3; i++) {
-                var p = joints[i].pixel;
-                drawing.draw_ui_handle_circle(p, 4, 0xFF00FF00, 0xFF00FFFF);
-            }
+
+            // 只绘制中间捕捉点
+            var p = this._jointC.pixel;
+            drawing.draw_ui_handle_circle(p, 4, 0xFF00FF00, 0xFF00FFFF);
+
             var p = this.location.pixel;
             drawing.draw_ui_handle_rect(p, 4, 0xFF00FFFF, 0xFF00FFFF);
             drawing.end();
         }
     };
 
-    Tower.prototype.tryGetLocation = function (e, type) {
+    SimplePoint.prototype.tryGetLocation = function (e, type) {
         this.updateForceJoint();
         if (type == "joint" || !pwg.defined(type)) {
             var D = pwg.UI_HITTEST_TOLERENCE * 2;
-            var joint = null;
-            var joints = this._joints;
-            for (var i = 0; i < 3; i++) {
-                var p = joints[i].pixel;
-                var d = p.getDistance(e.pixel);
-                if (d < D) {
-                    D = d;
-                    joint = joints[i];
-                }
+            // 只检测中间捕捉点
+            var p = this._jointC.pixel;
+            var d = p.getDistance(e.pixel);
+            if (d < D) {
+                return this._jointC;
             }
-            return joint;
         }
         return null;
     };
 
-    Tower.prototype.getLocation = function (id) {
-        if (this._jointA.id == id)
-            return this._jointA;
-        if (this._jointB.id == id)
-            return this._jointB;
+    SimplePoint.prototype.getLocation = function (id) {
+        // 只检查中间捕捉点
         if (this._jointC.id == id)
             return this._jointC;
         return null;
     };
 
-    Tower.prototype.tryGetUiCommand = function (e, handle) {
-        if (this.owner && this.owner.classid == TowerAlineGroup.classid) {
+    SimplePoint.prototype.tryGetUiCommand = function (e, handle) {
+        if (this.owner && this.owner.classid == SimplePointAlineGroup.classid) {
             return [new pwg.UiCommand(this, "remove-from-group", null, "从分组中移除", "simple")];
         }
         return null;
     };
 
-    Tower.prototype.setScale = function(s) {
+    SimplePoint.prototype.setScale = function (s) {
         let scale = Number(s);
         if (isNaN(scale) || scale <= 0) {
             scale = 1
@@ -180,7 +165,7 @@ pwg.simplePoint = function () {
         this._offset_location.offset.s = scale
     }
 
-    Tower.prototype.setRotation = function(r) {
+    SimplePoint.prototype.setRotation = function (r) {
         let rotation = Number(r);
         if (isNaN(rotation)) {
             rotation = 0;
@@ -190,7 +175,7 @@ pwg.simplePoint = function () {
         this._offset_location.offset.r = rotation;
     }
 
-    Tower.prototype._execute_ui_command = function (command) {
+    SimplePoint.prototype._execute_ui_command = function (command) {
         if (command.id == "remove-from-group") {
             var container = this.container;
             var owner = this.owner;
@@ -199,45 +184,45 @@ pwg.simplePoint = function () {
         }
     };
 
-    Tower.prototype.__save__ = function (json) {
+    SimplePoint.prototype.__save__ = function (json) {
         json = pwg.PointGraphics.prototype.__save__.call(this, json);
         return json;
     };
 
-    Tower.prototype.__load__ = function (json, context) {
+    SimplePoint.prototype.__load__ = function (json, context) {
         pwg.PointGraphics.prototype.__load__.call(this, json, context);
     };
-    pwg.registerClass(Tower);
-    pwg.Tower = Tower;
+    pwg.registerClass(SimplePoint);
+    pwg.SimplePoint = SimplePoint;
     ////////////////////////////////////////////////////////////////
-    function TowerXBuild(type, name, options) {
+    function SimplePointXBuild(type, name, options) {
         pwg.super(this, pwg.BaseBuild, "simple");
         this._type = type;
         this._options = options;
         this._creating = null;
         var that = this;
-        pwg.json.registerCreator("tower:" + type, function (container, id, json) {
+        pwg.json.registerCreator("SimplePoint:" + type, function (container, id, json) {
             return that.createJSON(container, id, json);
         });
 
     }
-    pwg.inherits(TowerXBuild, pwg.BaseBuild);
-    TowerXBuild.prototype.getLocationMode = function () {
+    pwg.inherits(SimplePointXBuild, pwg.BaseBuild);
+    SimplePointXBuild.prototype.getLocationMode = function () {
         return this._options.locationMode;
     };
 
-    TowerXBuild.prototype.addFromData = function (e) {
+    SimplePointXBuild.prototype.addFromData = function (e) {
         let creating = this.create(this._context.container, e)
         this._context.container.addChild(creating);
         creating.setScale(e.scale)
         creating.setRotation(e.rotation)
     }
 
-    TowerXBuild.prototype.update = function (e, action) {
+    SimplePointXBuild.prototype.update = function (e, action) {
         if (action == "down") {
             if (!this._creating) {
-                this._creating = this._context.container.createGraphics(Tower.classid, this._options);
-                this._creating.__json_creator__ = "tower:" + this._type;
+                this._creating = this._context.container.createGraphics(SimplePoint.classid, this._options);
+                this._creating.__json_creator__ = "SimplePoint:" + this._type;
                 this._creating.setLocation(e);
             }
         } else if (action == "move") {
@@ -252,38 +237,38 @@ pwg.simplePoint = function () {
             }
         }
     };
-    TowerXBuild.prototype.cancel = function () {
+    SimplePointXBuild.prototype.cancel = function () {
         if (this._creating) {
             this._creating = null;
         }
     };
 
-    TowerXBuild.prototype.create = function (container, e) {
-        var creating = container.createGraphics(Tower.classid, this._options);
-        creating.__json_creator__ = "tower:" + this._type;
+    SimplePointXBuild.prototype.create = function (container, e) {
+        var creating = container.createGraphics(SimplePoint.classid, this._options);
+        creating.__json_creator__ = "SimplePoint:" + this._type;
         creating.setLocation(e);
         return creating;
     };
-    TowerXBuild.prototype.createJSON = function (container, id, json) {
-        var creating = new Tower(container, id, this._options);
-        creating.__json_creator__ = "tower:" + this._type;
+    SimplePointXBuild.prototype.createJSON = function (container, id, json) {
+        var creating = new SimplePoint(container, id, this._options);
+        creating.__json_creator__ = "SimplePoint:" + this._type;
         return creating;
     };
 
-    TowerXBuild.prototype.render = function (context) {
+    SimplePointXBuild.prototype.render = function (context) {
         if (this._creating) {
             this._creating.update();
             this._creating.render(context.drawing, "entity"); //TODO:for other render 
         }
     };
 
-    function registerTowerXBuild(type, name, options) {
+    function registerSimplePointXBuild(type, name, options) {
         var icon = options.icon;
         var bounds = options.bounds;
-        var uri = "tower:" + icon;
+        var uri = "SimplePoint:" + icon;
         var xdata = options.xdata || {};
         xdata.CN = xdata.CN || name;
-        xdata.type = "tower:" + type;
+        xdata.type = "SimplePoint:" + type;
         pwg.drawing.define(uri, icon);
         var xoptions =
         {
@@ -291,13 +276,14 @@ pwg.simplePoint = function () {
             bounds: bounds,
             xdata: xdata
         };
-        var build = new TowerXBuild(type, name, xoptions);
+        var build = new SimplePointXBuild(type, name, xoptions);
+        console.log(name,build);
         pwg.graphics.registerBuild(name, build);
     }
     ///////////////////////////////////////////////////////
-    function TowerAlineGroup(container, id) {
+    function SimplePointAlineGroup(container, id) {
         pwg.super(this, pwg.Group, container, id);
-        this._towers = [];
+        this._SimplePoints = [];
         this._outline = [];
 
         this._add_head_handle = new pwg.UiHandle(this, "handle.add", "joint.add-head", "continuous");
@@ -309,50 +295,50 @@ pwg.simplePoint = function () {
         this._handles = [this._add_head_handle, this._add_tail_handle];
         this._hash_locations = new pwg.point();
     }
-    pwg.inherits(TowerAlineGroup, pwg.Group);
-    pwg.defineClassId(TowerAlineGroup, "pwg.TowerAlineGroup");
-    TowerAlineGroup.prototype.add = function (tower, iloc) {
-        if (!tower.owner /*TODO*/) {
-            var b = this.addChild(tower);
+    pwg.inherits(SimplePointAlineGroup, pwg.Group);
+    pwg.defineClassId(SimplePointAlineGroup, "pwg.SimplePointAlineGroup");
+    SimplePointAlineGroup.prototype.add = function (SimplePoint, iloc) {
+        if (!SimplePoint.owner /*TODO*/) {
+            var b = this.addChild(SimplePoint);
             if (b)
                 if (pwg.defined(iloc)) {
                     if (iloc == -1) {
-                        this._towers.unshift(tower);
+                        this._SimplePoints.unshift(SimplePoint);
                     } else
-                        this._towers.splice(iloc, 0, tower);
+                        this._SimplePoints.splice(iloc, 0, SimplePoint);
                 }
                 else {
-                    this._towers.push(tower);
+                    this._SimplePoints.push(SimplePoint);
                 }
             return b;
         }
         return false;
     };
 
-    TowerAlineGroup.prototype.removeChild = function (o) {
+    SimplePointAlineGroup.prototype.removeChild = function (o) {
 
         var b = pwg.Group.prototype.removeChild.call(this, o);
         var ix;
-        if ((ix = this._towers.indexOf(o)) != -1) {
-            this._towers.splice(ix, 1);
+        if ((ix = this._SimplePoints.indexOf(o)) != -1) {
+            this._SimplePoints.splice(ix, 1);
         }
         return b;
     };
 
-    TowerAlineGroup.prototype.makeInlineRoute = function (nloc, routeType) {
-        var towers = this._towers;
+    SimplePointAlineGroup.prototype.makeInlineRoute = function (nloc, routeType) {
+        var SimplePoints = this._SimplePoints;
         //var route =  this.container.createGraphics(pwg.Route.classid);
         var route = pwg.graphics.getBuild(routeType).create(this.container, []);
-        for (var i = 0, l = towers.length; i < l; i++) {
-            var tower = towers[i];
-            route.add(tower.getLocation(nloc));
+        for (var i = 0, l = SimplePoints.length; i < l; i++) {
+            var SimplePoint = SimplePoints[i];
+            route.add(SimplePoint.getLocation(nloc));
         }
         this.addChild(route);
     };
 
     //////////////////////////////////////////////////////////
-    var bounds = new pwg.rectangle(-16, -16, 32, 32);
-    registerTowerXBuild("简单点要素", "简单点要素", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/钢管杆(耐张).svg", bounds: bounds });
+    var bounds = new pwg.rectangle(-32, -32, 64, 64);
+    registerSimplePointXBuild("简单点要素", "简单点要素", { icon: pwg.ROOT_PATH + "/pwg/svg/标准/坐标.svg", bounds: bounds });
 
-    Tower.defaultBuild = pwg.graphics.getBuild("钢管杆(耐张)");
+    SimplePoint.defaultBuild = pwg.graphics.getBuild("坐标");
 };

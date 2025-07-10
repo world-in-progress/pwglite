@@ -82,7 +82,7 @@ export default class PWGDraw {
 
   getAllBuilds() {
     return this._builds.map((build) => {
-      return { name: build.title, class: build.constructor.name  };
+      return { name: build.title, class: build.constructor.name };
     });
   }
 
@@ -178,6 +178,8 @@ export default class PWGDraw {
     } else {
       console.warn("请上传合法geojson!");
     }
+    this._overLayer.render();
+
   }
 
   _loadSingleFeature(feature) {
@@ -193,7 +195,7 @@ export default class PWGDraw {
       var global = this._overLayer.context.lonlatToGlobal(lnglat);
       var pixel = this._overLayer.context.globalToPixel(lnglat);
 
-      this._activateBuild("钢管塔(耐张)");
+      this._activateBuild("简单点要素");
       console.log(this._uicontext.creatingBuild);
       if (!this._uicontext.creatingBuild) {
         console.error("没有相应的图形!");

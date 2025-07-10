@@ -19,6 +19,7 @@ files =\
     pwg-xlabel.js
     pwg-tube-union.js
     pwg-tower.js
+    pwg-simple-point.js
     pwg-device.js
     pwg-uicontext.js
     pwg-module-inline.js
